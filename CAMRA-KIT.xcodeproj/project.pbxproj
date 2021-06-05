@@ -7,25 +7,72 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		2002D8FB264C3AD500DCC4B6 /* BottomSheetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2002D8FA264C3AD400DCC4B6 /* BottomSheetView.swift */; };
+		203184D2266B4B4700D75BEC /* SPCamera.swift in Sources */ = {isa = PBXBuildFile; fileRef = 203184D1266B4B4700D75BEC /* SPCamera.swift */; };
+		20401F16263804C1007401B9 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 20401F14263804C1007401B9 /* Main.storyboard */; };
+		2046EF9326636B2C00B4A7D3 /* CaptureButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2046EF9226636B2C00B4A7D3 /* CaptureButton.swift */; };
+		2048961C2646D950002B6141 /* DemoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2048961B2646D950002B6141 /* DemoViewController.swift */; };
+		204896222646E787002B6141 /* MenuSheetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 204896212646E787002B6141 /* MenuSheetView.swift */; };
+		206635192649900600045D9D /* LenButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 206635182649900600045D9D /* LenButton.swift */; };
+		20780B7A264F9B7600288043 /* HistogramView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20780B79264F9B7600288043 /* HistogramView.swift */; };
+		20780B7C264FAA6700288043 /* TestViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20780B7B264FAA6700288043 /* TestViewController.swift */; };
+		20780B7E264FB45500288043 /* VImageWrapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20780B7D264FB45500288043 /* VImageWrapper.swift */; };
+		207FF8162655670500E8C4F8 /* CaptureImageDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 207FF8152655670400E8C4F8 /* CaptureImageDetailViewController.swift */; };
+		20A50F432664CB4100A93F78 /* TimerOptionBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20A50F422664CB4100A93F78 /* TimerOptionBar.swift */; };
+		20A50F4B266543AA00A93F78 /* WhiteBalanceOptionBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20A50F4A266543AA00A93F78 /* WhiteBalanceOptionBar.swift */; };
 		20A7262F2623D47E002A1533 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20A7262E2623D47E002A1533 /* AppDelegate.swift */; };
 		20A726312623D47E002A1533 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20A726302623D47E002A1533 /* SceneDelegate.swift */; };
-		20A726332623D47E002A1533 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20A726322623D47E002A1533 /* ViewController.swift */; };
-		20A726362623D47E002A1533 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 20A726342623D47E002A1533 /* Main.storyboard */; };
-		20A726392623D47E002A1533 /* CAMRA_KIT.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 20A726372623D47E002A1533 /* CAMRA_KIT.xcdatamodeld */; };
 		20A7263B2623D480002A1533 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 20A7263A2623D480002A1533 /* Assets.xcassets */; };
 		20A7263E2623D480002A1533 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 20A7263C2623D480002A1533 /* LaunchScreen.storyboard */; };
+		20B64BD2264E28B00002FA63 /* FocusView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20B64BD1264E28B00002FA63 /* FocusView.swift */; };
+		20BFEF342648D07E000ABC6D /* RAWButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20BFEF332648D07E000ABC6D /* RAWButton.swift */; };
+		20BFEF362648E302000ABC6D /* UIViewExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20BFEF352648E302000ABC6D /* UIViewExtension.swift */; };
+		20C9EB4D264A2845009F9A5C /* EVLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20C9EB4C264A2845009F9A5C /* EVLabel.swift */; };
+		20C9EB4F264A6DC8009F9A5C /* PreviewView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20C9EB4E264A6DC8009F9A5C /* PreviewView.swift */; };
+		20C9EB51264A814B009F9A5C /* SPCameraEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20C9EB50264A814B009F9A5C /* SPCameraEngine.swift */; };
+		20C9EB53264A8155009F9A5C /* SPPreviewView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20C9EB52264A8155009F9A5C /* SPPreviewView.swift */; };
+		20C9EB55264A815B009F9A5C /* SPGridView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20C9EB54264A815B009F9A5C /* SPGridView.swift */; };
+		20E5A00C2669FA490066F27A /* SPNotification+CameraEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20E5A00B2669FA490066F27A /* SPNotification+CameraEngine.swift */; };
+		20EA489D265B77F000B73A30 /* LenPositionSlider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20EA489C265B77F000B73A30 /* LenPositionSlider.swift */; };
+		20ED548E264CD83600D8FA73 /* SPCapturePhotoCaptureDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20ED548D264CD83600D8FA73 /* SPCapturePhotoCaptureDelegate.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		2002D8FA264C3AD400DCC4B6 /* BottomSheetView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BottomSheetView.swift; sourceTree = "<group>"; };
+		203184D1266B4B4700D75BEC /* SPCamera.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SPCamera.swift; sourceTree = "<group>"; };
+		203184D3266BB3AA00D75BEC /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
+		20401F15263804C1007401B9 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = "CAMRA-KIT/Base.lproj/Main.storyboard"; sourceTree = "<group>"; };
+		2046EF9226636B2C00B4A7D3 /* CaptureButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CaptureButton.swift; sourceTree = "<group>"; };
+		2048961B2646D950002B6141 /* DemoViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DemoViewController.swift; sourceTree = "<group>"; };
+		204896212646E787002B6141 /* MenuSheetView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuSheetView.swift; sourceTree = "<group>"; };
+		206635182649900600045D9D /* LenButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LenButton.swift; sourceTree = "<group>"; };
+		20780B79264F9B7600288043 /* HistogramView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistogramView.swift; sourceTree = "<group>"; };
+		20780B7B264FAA6700288043 /* TestViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestViewController.swift; sourceTree = "<group>"; };
+		20780B7D264FB45500288043 /* VImageWrapper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VImageWrapper.swift; sourceTree = "<group>"; };
+		207FF8152655670400E8C4F8 /* CaptureImageDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CaptureImageDetailViewController.swift; sourceTree = "<group>"; };
+		208187A7262B31B100E17F99 /* CAMRA-KIT.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "CAMRA-KIT.entitlements"; sourceTree = "<group>"; };
+		20A50F422664CB4100A93F78 /* TimerOptionBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimerOptionBar.swift; sourceTree = "<group>"; };
+		20A50F4A266543AA00A93F78 /* WhiteBalanceOptionBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WhiteBalanceOptionBar.swift; sourceTree = "<group>"; };
 		20A7262B2623D47E002A1533 /* CAMRA-KIT.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "CAMRA-KIT.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		20A7262E2623D47E002A1533 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		20A726302623D47E002A1533 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
-		20A726322623D47E002A1533 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
-		20A726352623D47E002A1533 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
-		20A726382623D47E002A1533 /* CAMRA_KIT.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = CAMRA_KIT.xcdatamodel; sourceTree = "<group>"; };
 		20A7263A2623D480002A1533 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		20A7263D2623D480002A1533 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		20A7263F2623D480002A1533 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		20B64BD1264E28B00002FA63 /* FocusView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FocusView.swift; sourceTree = "<group>"; };
+		20BFEF332648D07E000ABC6D /* RAWButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RAWButton.swift; sourceTree = "<group>"; };
+		20BFEF352648E302000ABC6D /* UIViewExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIViewExtension.swift; sourceTree = "<group>"; };
+		20C9EB4C264A2845009F9A5C /* EVLabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EVLabel.swift; sourceTree = "<group>"; };
+		20C9EB4E264A6DC8009F9A5C /* PreviewView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreviewView.swift; sourceTree = "<group>"; };
+		20C9EB50264A814B009F9A5C /* SPCameraEngine.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SPCameraEngine.swift; sourceTree = "<group>"; };
+		20C9EB52264A8155009F9A5C /* SPPreviewView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SPPreviewView.swift; sourceTree = "<group>"; };
+		20C9EB54264A815B009F9A5C /* SPGridView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SPGridView.swift; sourceTree = "<group>"; };
+		20E5A00B2669FA490066F27A /* SPNotification+CameraEngine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SPNotification+CameraEngine.swift"; sourceTree = "<group>"; };
+		20EA489C265B77F000B73A30 /* LenPositionSlider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LenPositionSlider.swift; sourceTree = "<group>"; };
+		20ED548D264CD83600D8FA73 /* SPCapturePhotoCaptureDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SPCapturePhotoCaptureDelegate.swift; sourceTree = "<group>"; };
+		30C538FB9D2AB7AE6034486F /* Pods-CAMRA-KIT.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-CAMRA-KIT.debug.xcconfig"; path = "Target Support Files/Pods-CAMRA-KIT/Pods-CAMRA-KIT.debug.xcconfig"; sourceTree = "<group>"; };
+		7F4776A8A00619DC231EC50E /* Pods_CAMRA_KIT.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_CAMRA_KIT.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		E6D18A3B7B1CF551D0FAFDDA /* Pods-CAMRA-KIT.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-CAMRA-KIT.release.xcconfig"; path = "Target Support Files/Pods-CAMRA-KIT/Pods-CAMRA-KIT.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -39,11 +86,60 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		2048961D2646D95C002B6141 /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				20401F14263804C1007401B9 /* Main.storyboard */,
+				20A7263C2623D480002A1533 /* LaunchScreen.storyboard */,
+			);
+			path = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		2048961E2646DB7C002B6141 /* CAMRA VC */ = {
+			isa = PBXGroup;
+			children = (
+				2048961B2646D950002B6141 /* DemoViewController.swift */,
+				207FF8152655670400E8C4F8 /* CaptureImageDetailViewController.swift */,
+			);
+			path = "CAMRA VC";
+			sourceTree = "<group>";
+		};
+		20A50F402664B72300A93F78 /* CAMRA UI */ = {
+			isa = PBXGroup;
+			children = (
+				20C9EB4E264A6DC8009F9A5C /* PreviewView.swift */,
+				204896212646E787002B6141 /* MenuSheetView.swift */,
+				2002D8FA264C3AD400DCC4B6 /* BottomSheetView.swift */,
+				2046EF9226636B2C00B4A7D3 /* CaptureButton.swift */,
+				20BFEF332648D07E000ABC6D /* RAWButton.swift */,
+				206635182649900600045D9D /* LenButton.swift */,
+				20B64BD1264E28B00002FA63 /* FocusView.swift */,
+				20C9EB4C264A2845009F9A5C /* EVLabel.swift */,
+				20EA489C265B77F000B73A30 /* LenPositionSlider.swift */,
+				20780B79264F9B7600288043 /* HistogramView.swift */,
+				20A50F422664CB4100A93F78 /* TimerOptionBar.swift */,
+				20A50F4A266543AA00A93F78 /* WhiteBalanceOptionBar.swift */,
+			);
+			path = "CAMRA UI";
+			sourceTree = "<group>";
+		};
+		20A50F412664B78800A93F78 /* Extensions & Utils */ = {
+			isa = PBXGroup;
+			children = (
+				20780B7D264FB45500288043 /* VImageWrapper.swift */,
+				20BFEF352648E302000ABC6D /* UIViewExtension.swift */,
+			);
+			path = "Extensions & Utils";
+			sourceTree = "<group>";
+		};
 		20A726222623D47E002A1533 = {
 			isa = PBXGroup;
 			children = (
+				203184D3266BB3AA00D75BEC /* README.md */,
 				20A7262D2623D47E002A1533 /* CAMRA-KIT */,
 				20A7262C2623D47E002A1533 /* Products */,
+				CC9F76B877D054FE88A053C0 /* Pods */,
+				89395CC723782DA95F09BF17 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -58,16 +154,49 @@
 		20A7262D2623D47E002A1533 /* CAMRA-KIT */ = {
 			isa = PBXGroup;
 			children = (
+				208187A7262B31B100E17F99 /* CAMRA-KIT.entitlements */,
 				20A7262E2623D47E002A1533 /* AppDelegate.swift */,
 				20A726302623D47E002A1533 /* SceneDelegate.swift */,
-				20A726322623D47E002A1533 /* ViewController.swift */,
-				20A726342623D47E002A1533 /* Main.storyboard */,
+				20780B7B264FAA6700288043 /* TestViewController.swift */,
+				20C9EB56264A816B009F9A5C /* Camera Engine */,
+				2048961E2646DB7C002B6141 /* CAMRA VC */,
+				20A50F402664B72300A93F78 /* CAMRA UI */,
+				20A50F412664B78800A93F78 /* Extensions & Utils */,
+				2048961D2646D95C002B6141 /* Supporting Files */,
 				20A7263A2623D480002A1533 /* Assets.xcassets */,
-				20A7263C2623D480002A1533 /* LaunchScreen.storyboard */,
 				20A7263F2623D480002A1533 /* Info.plist */,
-				20A726372623D47E002A1533 /* CAMRA_KIT.xcdatamodeld */,
 			);
 			path = "CAMRA-KIT";
+			sourceTree = "<group>";
+		};
+		20C9EB56264A816B009F9A5C /* Camera Engine */ = {
+			isa = PBXGroup;
+			children = (
+				20C9EB50264A814B009F9A5C /* SPCameraEngine.swift */,
+				20C9EB52264A8155009F9A5C /* SPPreviewView.swift */,
+				20ED548D264CD83600D8FA73 /* SPCapturePhotoCaptureDelegate.swift */,
+				20C9EB54264A815B009F9A5C /* SPGridView.swift */,
+				20E5A00B2669FA490066F27A /* SPNotification+CameraEngine.swift */,
+				203184D1266B4B4700D75BEC /* SPCamera.swift */,
+			);
+			path = "Camera Engine";
+			sourceTree = "<group>";
+		};
+		89395CC723782DA95F09BF17 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				7F4776A8A00619DC231EC50E /* Pods_CAMRA_KIT.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		CC9F76B877D054FE88A053C0 /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				30C538FB9D2AB7AE6034486F /* Pods-CAMRA-KIT.debug.xcconfig */,
+				E6D18A3B7B1CF551D0FAFDDA /* Pods-CAMRA-KIT.release.xcconfig */,
+			);
+			path = Pods;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -77,6 +206,7 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 20A726422623D480002A1533 /* Build configuration list for PBXNativeTarget "CAMRA-KIT" */;
 			buildPhases = (
+				AF5CC6181C40CB0A2E4EF872 /* [CP] Check Pods Manifest.lock */,
 				20A726272623D47E002A1533 /* Sources */,
 				20A726282623D47E002A1533 /* Frameworks */,
 				20A726292623D47E002A1533 /* Resources */,
@@ -127,33 +257,79 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				20401F16263804C1007401B9 /* Main.storyboard in Resources */,
 				20A7263E2623D480002A1533 /* LaunchScreen.storyboard in Resources */,
 				20A7263B2623D480002A1533 /* Assets.xcassets in Resources */,
-				20A726362623D47E002A1533 /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		AF5CC6181C40CB0A2E4EF872 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-CAMRA-KIT-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		20A726272623D47E002A1533 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				20A726332623D47E002A1533 /* ViewController.swift in Sources */,
-				20A726392623D47E002A1533 /* CAMRA_KIT.xcdatamodeld in Sources */,
+				20C9EB4F264A6DC8009F9A5C /* PreviewView.swift in Sources */,
+				20C9EB4D264A2845009F9A5C /* EVLabel.swift in Sources */,
+				20780B7C264FAA6700288043 /* TestViewController.swift in Sources */,
+				206635192649900600045D9D /* LenButton.swift in Sources */,
+				204896222646E787002B6141 /* MenuSheetView.swift in Sources */,
+				207FF8162655670500E8C4F8 /* CaptureImageDetailViewController.swift in Sources */,
+				20C9EB53264A8155009F9A5C /* SPPreviewView.swift in Sources */,
+				2048961C2646D950002B6141 /* DemoViewController.swift in Sources */,
+				20BFEF362648E302000ABC6D /* UIViewExtension.swift in Sources */,
+				20780B7A264F9B7600288043 /* HistogramView.swift in Sources */,
+				20ED548E264CD83600D8FA73 /* SPCapturePhotoCaptureDelegate.swift in Sources */,
+				20C9EB51264A814B009F9A5C /* SPCameraEngine.swift in Sources */,
+				203184D2266B4B4700D75BEC /* SPCamera.swift in Sources */,
 				20A7262F2623D47E002A1533 /* AppDelegate.swift in Sources */,
+				2002D8FB264C3AD500DCC4B6 /* BottomSheetView.swift in Sources */,
+				20A50F4B266543AA00A93F78 /* WhiteBalanceOptionBar.swift in Sources */,
+				20780B7E264FB45500288043 /* VImageWrapper.swift in Sources */,
+				20E5A00C2669FA490066F27A /* SPNotification+CameraEngine.swift in Sources */,
 				20A726312623D47E002A1533 /* SceneDelegate.swift in Sources */,
+				20BFEF342648D07E000ABC6D /* RAWButton.swift in Sources */,
+				2046EF9326636B2C00B4A7D3 /* CaptureButton.swift in Sources */,
+				20A50F432664CB4100A93F78 /* TimerOptionBar.swift in Sources */,
+				20EA489D265B77F000B73A30 /* LenPositionSlider.swift in Sources */,
+				20C9EB55264A815B009F9A5C /* SPGridView.swift in Sources */,
+				20B64BD2264E28B00002FA63 /* FocusView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXVariantGroup section */
-		20A726342623D47E002A1533 /* Main.storyboard */ = {
+		20401F14263804C1007401B9 /* Main.storyboard */ = {
 			isa = PBXVariantGroup;
 			children = (
-				20A726352623D47E002A1533 /* Base */,
+				20401F15263804C1007401B9 /* Base */,
 			);
 			name = Main.storyboard;
 			sourceTree = "<group>";
@@ -287,18 +463,22 @@
 		};
 		20A726432623D480002A1533 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 30C538FB9D2AB7AE6034486F /* Pods-CAMRA-KIT.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = "CAMRA-KIT/CAMRA-KIT.entitlements";
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = ZA8W6JSX4H;
+				DEVELOPMENT_TEAM = 6V3486Q75G;
 				INFOPLIST_FILE = "CAMRA-KIT/Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 14.4;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = "Microsoft.CAMRA-KIT";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.fihade.CAMRA-KIT";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SUPPORTS_MACCATALYST = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -306,18 +486,22 @@
 		};
 		20A726442623D480002A1533 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = E6D18A3B7B1CF551D0FAFDDA /* Pods-CAMRA-KIT.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = "CAMRA-KIT/CAMRA-KIT.entitlements";
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = ZA8W6JSX4H;
+				DEVELOPMENT_TEAM = 6V3486Q75G;
 				INFOPLIST_FILE = "CAMRA-KIT/Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 14.4;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = "Microsoft.CAMRA-KIT";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.fihade.CAMRA-KIT";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SUPPORTS_MACCATALYST = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -345,19 +529,6 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
-
-/* Begin XCVersionGroup section */
-		20A726372623D47E002A1533 /* CAMRA_KIT.xcdatamodeld */ = {
-			isa = XCVersionGroup;
-			children = (
-				20A726382623D47E002A1533 /* CAMRA_KIT.xcdatamodel */,
-			);
-			currentVersion = 20A726382623D47E002A1533 /* CAMRA_KIT.xcdatamodel */;
-			path = CAMRA_KIT.xcdatamodeld;
-			sourceTree = "<group>";
-			versionGroupType = wrapper.xcdatamodel;
-		};
-/* End XCVersionGroup section */
 	};
 	rootObject = 20A726232623D47E002A1533 /* Project object */;
 }

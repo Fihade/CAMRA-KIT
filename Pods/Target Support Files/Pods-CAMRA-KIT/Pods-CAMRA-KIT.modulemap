@@ -1,0 +1,6 @@
+framework module Pods_CAMRA_KIT {
+  umbrella header "Pods-CAMRA-KIT-umbrella.h"
+
+  export *
+  module * { export * }
+}
