@@ -15,6 +15,8 @@ protocol MenuSheetViewDelegate: AnyObject {
     func toggleCamera()
     
     func setFlashMode(using button: UIButton)
+    
+    func selectedAWBMode(with value: Int)
 }
 
 extension Notification.Name {
@@ -198,9 +200,6 @@ class MenuSheetView: UIView {
         
         
     }
-    
-    
- 
 }
 
 // MenuSheetView KVO
@@ -211,7 +210,7 @@ extension MenuSheetView {
             forName: .TimerDidSelected,
             object: nil, queue: .main,
             using: {_ in
-                if self.timerOptionBar.timer == Timer.default {
+                if self.timerOptionBar.timer == .default {
                     self.timerButton.setImage(UIImage(systemName: "timer"), for: .normal)
                 } else {
                     self.timerButton.setImage(UIImage(named: self.timerOptionBar.timer.hightlightIcon), for: .normal)
@@ -223,7 +222,7 @@ extension MenuSheetView {
             forName: .AWBDidSelected,
             object: .none, queue: .main,
             using: {_ in
-                if self.whiteBalanceOptionBar.whiteBalance == WhiteBalance.default {
+                if self.whiteBalanceOptionBar.whiteBalance == .default {
                     self.awbButton.setImage(UIImage(named: "awb"), for: .normal)
                 } else {
                     self.awbButton.setImage(UIImage(named: self.whiteBalanceOptionBar.whiteBalance.highlightIcon), for: .normal)

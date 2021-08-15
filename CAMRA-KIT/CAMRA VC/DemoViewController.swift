@@ -31,6 +31,8 @@ class DemoViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+//        var spCamera: SPCamera = SPCamera()
+        
         setupUI()
         cameraEngine.delegate = self
         menuSheet.delegate = self
@@ -49,7 +51,7 @@ class DemoViewController: UIViewController {
             forName: .AVCaptureDeviceSubjectAreaDidChange,
             object: .none, queue: .none,
             using: {_ in
-                self.cameraEngine.autoFocus()
+                self.cameraEngine.focusAutomaticlly()
                 self.focusView?.dismissAnimate(completionHandler: {view in
                     view.removeFromSuperview()
                 })
@@ -61,17 +63,17 @@ class DemoViewController: UIViewController {
             object: .none, queue: .main,
             using: { value in
                 guard let wb = value.object as? WhiteBalance else { return }
-                self.cameraEngine.setCameraAWB(in: wb.value)
+                self.cameraEngine.setCameraAWB(at: Float(wb.value))
             }
         )
         
-//        cameraEngine.addPreview(mainView)
+        cameraEngine.addPreview(mainView)
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
-//        cameraEngine.startCameraRunning()
+        cameraEngine.startCameraRunning()
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -147,7 +149,6 @@ extension DemoViewController {
         switch recogizer.state {
             case .changed:
                 let y = recogizer.translation(in: view).y
-                
                 var current = bias - (Float(y) / 10)
                 
                 if current > cameraEngine.maxBias {
@@ -156,7 +157,7 @@ extension DemoViewController {
                     current = cameraEngine.minBias
                 }
                 evLabel.setBias(current)
-                cameraEngine.setDeviceBias(current)
+                cameraEngine.setCameraBias(current)
             case .ended:
                 self.bias = evLabel.bias
             default:
@@ -189,8 +190,7 @@ extension DemoViewController {
 
             focusOfFrame.animate()
             focusView = focusOfFrame
-            cameraEngine.focus(with: .autoFocus, exposureMode: .continuousAutoExposure, at: devicePoint, monitorSubjectAreaChange: true)
-            
+            cameraEngine.focusOnPoint(at: devicePoint, with: .autoFocus, and: .continuousAutoExposure)
             self.feedbackGenerator = nil
         }
         
@@ -198,31 +198,32 @@ extension DemoViewController {
 }
 
 extension DemoViewController: SPCameraEngineDelegate {
+    func toggleCamera(to position: AVCaptureDevice.Position) {
+        DispatchQueue.main.async {[weak self] in
+            self?.bottomSheet.setRAWStatus(position == .back ? .RAW : .MAX)
+        }
+    }
     
     func displayRGBHistogramWith(layers: [CAShapeLayer]?) {
         self.histogramView.layer.sublayers?.removeAll()
         
         if let layers = layers {
-            DispatchQueue.main.async {[weak self] in
+//            DispatchQueue.main.async {[weak self] in
                 for layer in layers {
-                    self?.histogramView.layer.addSublayer(layer)
+                    self.histogramView.layer.addSublayer(layer)
                 }
-            }
+//            }
         }
     }
     
-    
-    func toggleCamera(to back: Bool) {
-        DispatchQueue.main.async {
-            self.bottomSheet.setRAWStatus(back ? .RAW : .MAX)
+    func cameraEngineChangeBiasWith(value: Float) {
+        DispatchQueue.main.async {[weak self] in
+            self?.evLabel.setBias(value)
         }
     }
 }
 
 extension DemoViewController: MenuSheetViewDelegate {
-    
-    
-    
     func showGirdView(using button: UIButton) {
         mainView.showGrid.toggle()
         button.tintColor = mainView.showGrid ? .yellow : .white
@@ -234,27 +235,32 @@ extension DemoViewController: MenuSheetViewDelegate {
     
     func setFlashMode(using button: UIButton) {
         switch cameraEngine.flashMode {
-            case .on:
-                cameraEngine.setFlashMode(.off)
-                button.tintColor = .white
-            default:
-                cameraEngine.setFlashMode(.on)
-                button.tintColor = .yellow
+        case .on:
+            cameraEngine.setFlashMode(.off)
+            button.tintColor = .white
+        default:
+            cameraEngine.setFlashMode(.on)
+            button.tintColor = .yellow
         }
+    }
+    
+    func selectedAWBMode(with value: Int) {
+        cameraEngine.setCameraAWB(at: Float(value))
     }
 }
 
 extension DemoViewController: BottomSheetViewDelegate {
     
-    
     func switchCameraFocusMode(is MFocus: Bool) {
         if focusView != nil { self.focusView?.removeFromSuperview() }
-        self.cameraEngine.switchCameraFocusMode(isAuto: MFocus)
+//        self.cameraEngine.switchCameraFocusMode(isAuto: MFocus)
+//        cameraEngine.
+        ///Tag: switch camera focus mode
     }
     
     
     func setLenPosition(with value: Float) {
-        cameraEngine.setLenPosition(with: value)
+        cameraEngine.adjustLenPosition(with: value)
     }
 
     func checkImageInfo(_ image: UIImage) {
@@ -262,7 +268,7 @@ extension DemoViewController: BottomSheetViewDelegate {
             return
         }
         
-        detailVC.transitioningDelegate = self
+//        detailVC.transitioningDelegate = self
         detailVC.sourceImage = image
         showDetailViewController(detailVC, sender: nil)
     }
@@ -284,7 +290,6 @@ extension DemoViewController: BottomSheetViewDelegate {
     }
     
     func capturePhoto() {
-        
         let delegate = SPCapturePhotoCaptureDelegate(
             willCapture: {
                 self.bottomSheet.willCapture()
@@ -299,12 +304,9 @@ extension DemoViewController: BottomSheetViewDelegate {
                 self.cameraEngine.setDelegateNil(using: delegate)
             }
         )
-        cameraEngine.delayTime = delayTime
+//        cameraEngine.delayTime = delayTime
         cameraEngine.capturePhoto(with: delegate)
     }
     
 }
 
-extension DemoViewController: UIViewControllerTransitioningDelegate {
-    
-}

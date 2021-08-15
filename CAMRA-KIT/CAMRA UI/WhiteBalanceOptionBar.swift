@@ -28,14 +28,11 @@ class WhiteBalanceButton: UIButton {
     var tapEvent: ((WhiteBalance) -> Void)?
     
     convenience init(wb: WhiteBalance) {
-        self.init()
-        self.setValue(wb, forKey: "wb")
-        setupUI()
+        self.init(wb: wb, size: 25)
     }
     
     convenience init(wb: WhiteBalance, size: CGFloat = 25) {
         self.init()
-        
         self.setValue(wb, forKey: "wb")
         self.size = size
         setupUI()

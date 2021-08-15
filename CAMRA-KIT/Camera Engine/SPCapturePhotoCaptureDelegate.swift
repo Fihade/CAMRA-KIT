@@ -23,11 +23,11 @@ class SPCapturePhotoCaptureDelegate: NSObject, AVCapturePhotoCaptureDelegate {
     
     private var feedbackGenerator : UISelectionFeedbackGenerator? = nil
     
-    init(
-        willCapture: @escaping () -> Void,
-        photoProcessing: @escaping (Bool) -> Void,
-        finishCapturing: @escaping (Data) -> Void,
-        completionHandler: @escaping (SPCapturePhotoCaptureDelegate) -> Void) {
+    init(willCapture: @escaping () -> Void,
+         photoProcessing: @escaping (Bool) -> Void,
+         finishCapturing: @escaping (Data) -> Void,
+         completionHandler: @escaping (SPCapturePhotoCaptureDelegate) -> Void) {
+        
         self.willCapture = willCapture
         self.photoProcessing = photoProcessing
         self.finishCapturing = finishCapturing

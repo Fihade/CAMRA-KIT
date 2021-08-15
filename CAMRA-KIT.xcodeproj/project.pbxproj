@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		2002D8FB264C3AD500DCC4B6 /* BottomSheetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2002D8FA264C3AD400DCC4B6 /* BottomSheetView.swift */; };
+		20244FD126C8E8A00069C843 /* SPCameraSystemAbility.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20244FD026C8E8A00069C843 /* SPCameraSystemAbility.swift */; };
 		203184D2266B4B4700D75BEC /* SPCamera.swift in Sources */ = {isa = PBXBuildFile; fileRef = 203184D1266B4B4700D75BEC /* SPCamera.swift */; };
 		20401F16263804C1007401B9 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 20401F14263804C1007401B9 /* Main.storyboard */; };
 		2046EF9326636B2C00B4A7D3 /* CaptureButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2046EF9226636B2C00B4A7D3 /* CaptureButton.swift */; };
@@ -39,6 +40,7 @@
 
 /* Begin PBXFileReference section */
 		2002D8FA264C3AD400DCC4B6 /* BottomSheetView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BottomSheetView.swift; sourceTree = "<group>"; };
+		20244FD026C8E8A00069C843 /* SPCameraSystemAbility.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SPCameraSystemAbility.swift; sourceTree = "<group>"; };
 		203184D1266B4B4700D75BEC /* SPCamera.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SPCamera.swift; sourceTree = "<group>"; };
 		203184D3266BB3AA00D75BEC /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		20401F15263804C1007401B9 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = "CAMRA-KIT/Base.lproj/Main.storyboard"; sourceTree = "<group>"; };
@@ -178,6 +180,7 @@
 				20C9EB54264A815B009F9A5C /* SPGridView.swift */,
 				20E5A00B2669FA490066F27A /* SPNotification+CameraEngine.swift */,
 				203184D1266B4B4700D75BEC /* SPCamera.swift */,
+				20244FD026C8E8A00069C843 /* SPCameraSystemAbility.swift */,
 			);
 			path = "Camera Engine";
 			sourceTree = "<group>";
@@ -316,6 +319,7 @@
 				20A726312623D47E002A1533 /* SceneDelegate.swift in Sources */,
 				20BFEF342648D07E000ABC6D /* RAWButton.swift in Sources */,
 				2046EF9326636B2C00B4A7D3 /* CaptureButton.swift in Sources */,
+				20244FD126C8E8A00069C843 /* SPCameraSystemAbility.swift in Sources */,
 				20A50F432664CB4100A93F78 /* TimerOptionBar.swift in Sources */,
 				20EA489D265B77F000B73A30 /* LenPositionSlider.swift in Sources */,
 				20C9EB55264A815B009F9A5C /* SPGridView.swift in Sources */,
