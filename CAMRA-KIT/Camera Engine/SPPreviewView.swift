@@ -44,7 +44,7 @@ class SPPreviewView: UIView {
         }
     }
     
-    var showGrid: Bool = false {
+    private(set) public var showGrid: Bool = false {
         didSet {
             if oldValue {
                 self.gridView = nil
@@ -52,6 +52,10 @@ class SPPreviewView: UIView {
                 self.gridView = SPGridView(frame: self.bounds)
             }
         }
+    }
+    
+    public func toggleGrid() {
+        showGrid.toggle()
     }
 
     override class var layerClass: AnyClass {

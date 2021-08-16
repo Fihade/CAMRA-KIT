@@ -25,7 +25,7 @@
 		20A726312623D47E002A1533 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20A726302623D47E002A1533 /* SceneDelegate.swift */; };
 		20A7263B2623D480002A1533 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 20A7263A2623D480002A1533 /* Assets.xcassets */; };
 		20A7263E2623D480002A1533 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 20A7263C2623D480002A1533 /* LaunchScreen.storyboard */; };
-		20B64BD2264E28B00002FA63 /* FocusView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20B64BD1264E28B00002FA63 /* FocusView.swift */; };
+		20B64BD2264E28B00002FA63 /* SPFocusView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20B64BD1264E28B00002FA63 /* SPFocusView.swift */; };
 		20BFEF342648D07E000ABC6D /* RAWButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20BFEF332648D07E000ABC6D /* RAWButton.swift */; };
 		20BFEF362648E302000ABC6D /* UIViewExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20BFEF352648E302000ABC6D /* UIViewExtension.swift */; };
 		20C9EB4D264A2845009F9A5C /* EVLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20C9EB4C264A2845009F9A5C /* EVLabel.swift */; };
@@ -33,7 +33,6 @@
 		20C9EB51264A814B009F9A5C /* SPCameraEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20C9EB50264A814B009F9A5C /* SPCameraEngine.swift */; };
 		20C9EB53264A8155009F9A5C /* SPPreviewView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20C9EB52264A8155009F9A5C /* SPPreviewView.swift */; };
 		20C9EB55264A815B009F9A5C /* SPGridView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20C9EB54264A815B009F9A5C /* SPGridView.swift */; };
-		20E5A00C2669FA490066F27A /* SPNotification+CameraEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20E5A00B2669FA490066F27A /* SPNotification+CameraEngine.swift */; };
 		20EA489D265B77F000B73A30 /* LenPositionSlider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20EA489C265B77F000B73A30 /* LenPositionSlider.swift */; };
 		20ED548E264CD83600D8FA73 /* SPCapturePhotoCaptureDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20ED548D264CD83600D8FA73 /* SPCapturePhotoCaptureDelegate.swift */; };
 /* End PBXBuildFile section */
@@ -61,7 +60,7 @@
 		20A7263A2623D480002A1533 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		20A7263D2623D480002A1533 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		20A7263F2623D480002A1533 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		20B64BD1264E28B00002FA63 /* FocusView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FocusView.swift; sourceTree = "<group>"; };
+		20B64BD1264E28B00002FA63 /* SPFocusView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SPFocusView.swift; sourceTree = "<group>"; };
 		20BFEF332648D07E000ABC6D /* RAWButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RAWButton.swift; sourceTree = "<group>"; };
 		20BFEF352648E302000ABC6D /* UIViewExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIViewExtension.swift; sourceTree = "<group>"; };
 		20C9EB4C264A2845009F9A5C /* EVLabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EVLabel.swift; sourceTree = "<group>"; };
@@ -69,7 +68,6 @@
 		20C9EB50264A814B009F9A5C /* SPCameraEngine.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SPCameraEngine.swift; sourceTree = "<group>"; };
 		20C9EB52264A8155009F9A5C /* SPPreviewView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SPPreviewView.swift; sourceTree = "<group>"; };
 		20C9EB54264A815B009F9A5C /* SPGridView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SPGridView.swift; sourceTree = "<group>"; };
-		20E5A00B2669FA490066F27A /* SPNotification+CameraEngine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SPNotification+CameraEngine.swift"; sourceTree = "<group>"; };
 		20EA489C265B77F000B73A30 /* LenPositionSlider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LenPositionSlider.swift; sourceTree = "<group>"; };
 		20ED548D264CD83600D8FA73 /* SPCapturePhotoCaptureDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SPCapturePhotoCaptureDelegate.swift; sourceTree = "<group>"; };
 		30C538FB9D2AB7AE6034486F /* Pods-CAMRA-KIT.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-CAMRA-KIT.debug.xcconfig"; path = "Target Support Files/Pods-CAMRA-KIT/Pods-CAMRA-KIT.debug.xcconfig"; sourceTree = "<group>"; };
@@ -115,7 +113,6 @@
 				2046EF9226636B2C00B4A7D3 /* CaptureButton.swift */,
 				20BFEF332648D07E000ABC6D /* RAWButton.swift */,
 				206635182649900600045D9D /* LenButton.swift */,
-				20B64BD1264E28B00002FA63 /* FocusView.swift */,
 				20C9EB4C264A2845009F9A5C /* EVLabel.swift */,
 				20EA489C265B77F000B73A30 /* LenPositionSlider.swift */,
 				20780B79264F9B7600288043 /* HistogramView.swift */,
@@ -178,9 +175,9 @@
 				20C9EB52264A8155009F9A5C /* SPPreviewView.swift */,
 				20ED548D264CD83600D8FA73 /* SPCapturePhotoCaptureDelegate.swift */,
 				20C9EB54264A815B009F9A5C /* SPGridView.swift */,
-				20E5A00B2669FA490066F27A /* SPNotification+CameraEngine.swift */,
 				203184D1266B4B4700D75BEC /* SPCamera.swift */,
 				20244FD026C8E8A00069C843 /* SPCameraSystemAbility.swift */,
+				20B64BD1264E28B00002FA63 /* SPFocusView.swift */,
 			);
 			path = "Camera Engine";
 			sourceTree = "<group>";
@@ -315,7 +312,6 @@
 				2002D8FB264C3AD500DCC4B6 /* BottomSheetView.swift in Sources */,
 				20A50F4B266543AA00A93F78 /* WhiteBalanceOptionBar.swift in Sources */,
 				20780B7E264FB45500288043 /* VImageWrapper.swift in Sources */,
-				20E5A00C2669FA490066F27A /* SPNotification+CameraEngine.swift in Sources */,
 				20A726312623D47E002A1533 /* SceneDelegate.swift in Sources */,
 				20BFEF342648D07E000ABC6D /* RAWButton.swift in Sources */,
 				2046EF9326636B2C00B4A7D3 /* CaptureButton.swift in Sources */,
@@ -323,7 +319,7 @@
 				20A50F432664CB4100A93F78 /* TimerOptionBar.swift in Sources */,
 				20EA489D265B77F000B73A30 /* LenPositionSlider.swift in Sources */,
 				20C9EB55264A815B009F9A5C /* SPGridView.swift in Sources */,
-				20B64BD2264E28B00002FA63 /* FocusView.swift in Sources */,
+				20B64BD2264E28B00002FA63 /* SPFocusView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

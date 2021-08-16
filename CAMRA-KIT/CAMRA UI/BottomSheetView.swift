@@ -16,11 +16,11 @@ protocol BottomSheetViewDelegate: NSObjectProtocol {
     
     func capturePhoto()
     
-    func checkImageInfo(_ image: UIImage)
+//    func checkImageInfo(_ image: UIImage)
     
     func setLenPosition(with value: Float)
     
-    func switchCameraFocusMode(is MFocus: Bool)
+    func switchCameraFocusMode(is ManualFocus: Bool)
 }
 
 class BottomSheetView: UIView {
@@ -58,7 +58,6 @@ class BottomSheetView: UIView {
     private func setupUI() {
         // Set up low half area
         let lowHalfArea = UILayoutGuide()
-        
         
         captureButton = UIButton()
         captureButton.backgroundColor = self.backgroundColor
@@ -192,7 +191,6 @@ class BottomSheetView: UIView {
         delegate?.switchCameraFocusMode(is: expand)
         
         UIView.animate(withDuration: 0.3, delay: 0, options: .curveEaseOut, animations: {
-            
             let distance = (self.bounds.width + self.lenPositionSlider.bounds.width) / 2
             self.lenPositionSlider.transform = CGAffineTransform(translationX: self.expand ? distance : 0, y: 0)
             self.focusModeButton.transform = CGAffineTransform(translationX: self.expand ? distance : 0, y: 0)
@@ -232,11 +230,10 @@ extension BottomSheetView {
     }
     
     @objc private func tap(_ sender: UITapGestureRecognizer) {
-        if let imageView = sender.view as? UIImageView,
-           let image = imageView.image {
-            
-            delegate?.checkImageInfo(image)
-        }
+//        if let imageView = sender.view as? UIImageView,
+//           let image = imageView.image {
+//
+//        }
     }
 }
 

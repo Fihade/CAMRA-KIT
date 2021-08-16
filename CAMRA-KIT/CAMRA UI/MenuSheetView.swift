@@ -17,6 +17,8 @@ protocol MenuSheetViewDelegate: AnyObject {
     func setFlashMode(using button: UIButton)
     
     func selectedAWBMode(with value: Int)
+    
+    
 }
 
 extension Notification.Name {
@@ -42,7 +44,6 @@ class MenuSheetView: UIView {
     private var timerOptionBar: TimerOptionBar!
     private var whiteBalanceOptionBar: WhiteBalanceOptionBar!
     
-        
     override init(frame: CGRect) {
         super.init(frame: frame)
         setupUI()
@@ -58,7 +59,6 @@ class MenuSheetView: UIView {
     }
     
     private func setupUI() {
-        
         dragBar = UIImageView(image: UIImage(systemName: "minus"))
         dragBar.tintColor = #colorLiteral(red: 0.921431005, green: 0.9214526415, blue: 0.9214410186, alpha: 1)
         dragBar.preferredSymbolConfiguration = .init(font: UIFont.systemFont(ofSize: 15, weight: .bold))
@@ -194,11 +194,7 @@ class MenuSheetView: UIView {
             whiteBalanceOptionBar.trailingAnchor.constraint(equalTo: self.trailingAnchor),
             whiteBalanceOptionBar.heightAnchor.constraint(equalTo: container1.heightAnchor),
             whiteBalanceOptionBar.topAnchor.constraint(equalTo: container1.topAnchor),
-            
         ])
-        
-        
-        
     }
 }
 
@@ -223,9 +219,10 @@ extension MenuSheetView {
             object: .none, queue: .main,
             using: {_ in
                 if self.whiteBalanceOptionBar.whiteBalance == .default {
-                    self.awbButton.setImage(UIImage(named: "awb"), for: .normal)
+                    self.awbButton.isSelected = false
                 } else {
-                    self.awbButton.setImage(UIImage(named: self.whiteBalanceOptionBar.whiteBalance.highlightIcon), for: .normal)
+                    self.awbButton.setImage(UIImage(named: self.whiteBalanceOptionBar.whiteBalance.highlightIcon), for: .selected)
+                    self.awbButton.isSelected = true
                 }
             }
         )

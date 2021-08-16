@@ -21,8 +21,6 @@ class SPCapturePhotoCaptureDelegate: NSObject, AVCapturePhotoCaptureDelegate {
     private var photoData: Data?
     private var rawFileURL: URL?
     
-    private var feedbackGenerator : UISelectionFeedbackGenerator? = nil
-    
     init(willCapture: @escaping () -> Void,
          photoProcessing: @escaping (Bool) -> Void,
          finishCapturing: @escaping (Data) -> Void,
@@ -44,14 +42,11 @@ class SPCapturePhotoCaptureDelegate: NSObject, AVCapturePhotoCaptureDelegate {
     func photoOutput(_ output: AVCapturePhotoOutput, willCapturePhotoFor resolvedSettings: AVCaptureResolvedPhotoSettings) {
         willCapture()
         
-        feedbackGenerator = UISelectionFeedbackGenerator()
-        feedbackGenerator?.prepare()
-        feedbackGenerator?.selectionChanged()
     }
     
     // Did Capture
     func photoOutput(_ output: AVCapturePhotoOutput, didCapturePhotoFor resolvedSettings: AVCaptureResolvedPhotoSettings) {
-        feedbackGenerator = nil
+        
         
     }
     

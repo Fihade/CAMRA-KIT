@@ -10,24 +10,35 @@ import Foundation
 import AVFoundation
 import Accelerate
 
+extension Float {
+    static func oneDecimals(value: Float) -> Float {
+        let s = String(format:"%.1f",value)
+        return Float(s)!
+    }
+}
+
 @objc protocol SPCameraEngineDelegate: AnyObject {
     
     func displayRGBHistogramWith(layers: [CAShapeLayer]?)
-    func toggleCamera(to position: AVCaptureDevice.Position)
-    
     @objc optional func cameraEngineChangeBiasWith(value: Float)
-//    @objc optional func
+    @objc optional func cameraEngine(bias: Float)
+    @objc optional func cameraEngine(temperatureOfAWB: Float)
+    @objc optional func cameraEngine(lenPosition: Float)
+    @objc optional func cameraEngine(tap view: SPPreviewView, at point: CGPoint)
+    func cameraEngine(toggle position: AVCaptureDevice.Position)
 }
 
 class SPCameraEngine: NSObject {
     
-    private enum SessionSetupResult {
-        case success
+    private enum CameraPermissionStatus {
+        case authorized
         case notAuthorized
         case configurationFailed
     }
     
-    private var setupResult: SessionSetupResult!
+    public weak var delegate: SPCameraEngineDelegate?
+    private var cameraStatus: CameraPermissionStatus!
+    private lazy var camera: SPCamera = SPCamera()
     
     private lazy var captureSession = AVCaptureSession()
     private lazy var sessionQueue = DispatchQueue(label: "Camera Session Queue")
@@ -39,26 +50,20 @@ class SPCameraEngine: NSObject {
         }
     }
     
+    private var focusView: SPFocusView?
+    
     private var captureDeviceInput: AVCaptureDeviceInput!
     private lazy var photoDataOutput = AVCapturePhotoOutput()
-
-    private var pinchRecognizer: UIPinchGestureRecognizer?
     
     // Related to RAW
-//    public var rawMode: RAWMode = .DNG
     public var rawOrMax = false
-    public var isRAWSupported = true
     
     // Delay Capture Time
     private var delayTime = 0
     
-    // Other
-    public var swipeGestures: [UISwipeGestureRecognizer]?
-    
     private var inProgressPhotoCaptureDelegates = [Int64: SPCapturePhotoCaptureDelegate]()
     
-    public weak var delegate: SPCameraEngineDelegate?
-    
+    // Related to hisgoram
     var cgImageFormat = vImage_CGImageFormat(
         bitsPerComponent: 8,
         bitsPerPixel: 32,
@@ -69,44 +74,43 @@ class SPCameraEngine: NSObject {
         renderingIntent: .defaultIntent)
     
     var converter: vImageConverter?
-    
     var sourceBuffers = [vImage_Buffer]()
     var destinationBuffer = vImage_Buffer()
     let vNoFlags = vImage_Flags(kvImageNoFlags)
     
-    //----------------
-    lazy var camera: SPCamera = SPCamera()
-    //----------------
+    private var feedbackGenerator : UISelectionFeedbackGenerator? = nil
     
     
     convenience init(preview: SPPreviewView) {
         self.init()
-        self.previewView = preview
+        addPreview(preview)
     }
     
     override init() {
         super.init()
-        self.checkPermission()
-        self.setupCaptureSession()
+        self.checkCameraPermission()
+//        self.setupCaptureSession()
     }
     
     deinit {
         destinationBuffer.free()
+        feedbackGenerator = nil
     }
     
-    // Check permission to use camera
-    private func checkPermission() {
+    // Check permission about camera
+    private func checkCameraPermission() {
         switch AVCaptureDevice.authorizationStatus(for: .video) {
             case .authorized:
+                cameraStatus = .authorized
                 break
             case .notDetermined:
                 AVCaptureDevice.requestAccess(for: .video, completionHandler: { granted in
-                    if !granted {
-                        self.setupResult = .notAuthorized
-                    }
+                    if !granted { self.cameraStatus = .notAuthorized }
                 })
+                break
             default:
-                setupResult = .notAuthorized
+                cameraStatus = .notAuthorized
+                break
         }
     }
     
@@ -118,40 +122,6 @@ class SPCameraEngine: NSObject {
         self.captureSession.stopRunning()
     }
     
-    
-    private func addGestureToPreviewView() {
-        guard let preview = previewView else { return }
-        
-        let tapFocusGesture = UITapGestureRecognizer(target: self, action: #selector(tapFocus(_:)))
-        preview.addGestureRecognizer(tapFocusGesture)
-        
-        let biasPanGesture = UIPanGestureRecognizer(target: self, action: #selector(swipUpPreview(_:)))
-        preview.addGestureRecognizer(biasPanGesture)
-    }
-    
-
-    @objc private func tapFocus(_ recognizer: UITapGestureRecognizer) {
-        let point = previewView.videoPreviewLayer.captureDevicePointConverted(fromLayerPoint: recognizer.location(in: previewView))
-        focusOnPoint(at: point, with: .autoFocus, and: .autoExpose)
-    }
-    
-    @objc private func swipUpPreview(_ recogizer: UIPanGestureRecognizer) {
-        guard let view = recogizer.view else {return}
-        switch recogizer.state {
-            case .changed:
-                let y = recogizer.translation(in: view).y
-                var value = bias - (Float(y) / 10)
-                if value > maxBias {
-                    value = maxBias
-                }else if(value < minBias) {
-                    value = minBias
-                }
-                delegate?.cameraEngineChangeBiasWith?(value: value)
-                self.setCameraBias(value)
-            default:
-                break
-        }
-    }
 //    private func setRaw(_ raw: Bool) {
 //        self.rawOrMax = raw
 //        if raw {
@@ -170,16 +140,94 @@ class SPCameraEngine: NSObject {
 //            attachZoom(to: previewView!)
 //        }
 //    }
-
     
+    private func observe() {
+        NotificationCenter.default.addObserver(
+            forName: .AVCaptureDeviceSubjectAreaDidChange,
+            object: .none, queue: .none,
+            using: {_ in
+                print("AVCaptureDeviceSubjectAreaDidChange")
+                self.focusView?.dismissAnimate(completionHandler: {view in
+                    view.removeFromSuperview()
+                })
+                self.focusAutomaticlly()
+            }
+        )
+    }
+    
+    // NOTE: values: preview's pan gesture
+    private var beganPanY: CGFloat!
+    private var beganPanBias: Float!
+}
+
+//MARK: Related to gestures of preview
+extension SPCameraEngine {
+    
+    
+    private func addGestureToPreviewView() {
+        guard let preview = previewView else { return }
+        
+        let tapFocusGesture = UITapGestureRecognizer(target: self, action: #selector(tapFocus(_:)))
+        preview.addGestureRecognizer(tapFocusGesture)
+        
+        let biasPanGesture = UIPanGestureRecognizer(target: self, action: #selector(swipUpPreview(_:)))
+        preview.addGestureRecognizer(biasPanGesture)
+    }
+    
+    @objc private func tapFocus(_ recognizer: UITapGestureRecognizer) {
+        
+        feedbackGenerator = UISelectionFeedbackGenerator()
+        feedbackGenerator?.prepare()
+        feedbackGenerator?.selectionChanged()
+        
+        defer {
+            self.feedbackGenerator = nil
+        }
+        // Get point where you tapped.
+        let point = previewView.videoPreviewLayer.captureDevicePointConverted(fromLayerPoint: recognizer.location(in: previewView))
+        // If have explicit focus view on preview, need to remove it fistly
+        if focusView != nil {
+            focusView?.removeFromSuperview()
+        }
+        // Reset focus view and add subview
+        focusView = SPFocusView(location: point)
+        previewView.addSubview(focusView!)
+        focusView?.animate()
+        // Focus on point tapped
+        focusOnPoint(at: point, with: .autoFocus, and: .autoExpose)
+    }
+    
+    @objc private func swipUpPreview(_ recogizer: UIPanGestureRecognizer) {
+        guard let view = recogizer.view else {return}
+        switch recogizer.state {
+            case .began:
+                beganPanY = recogizer.translation(in: view).y
+                beganPanBias = bias
+            case .changed:
+                let sy = recogizer.translation(in: view).y
+                let height = view.bounds.height
+                var value = beganPanBias - Float((sy - beganPanY) / height) * maxBias
+                value = Float.oneDecimals(value: value)
+                if value != bias {
+                    self.setCameraBias(value)
+                    delegate?.cameraEngine?(bias: bias)
+                }
+            default:
+                break
+        }
+    }
 }
 
 //MARK: SPCameraSystemAbility protocol
 extension SPCameraEngine: SPCameraSystemAbility {
+    
     var minBias: Float { return camera.minBias }
-    var maxBias: Float { return camera.minBias }
+    var maxBias: Float { return camera.maxBias }
     var bias: Float { return camera.bias }
     var flashMode: AVCaptureDevice.FlashMode { return camera.flashMode }
+    var cameraPosition: AVCaptureDevice.Position { return camera.cameraPosition }
+    
+    var isRAWSupported: Bool { return camera.isRAWSupported }
     
     func focusOnPoint(at point: CGPoint, with mode: AVCaptureDevice.FocusMode, and exposureMode: AVCaptureDevice.ExposureMode) {
         self.camera.focusOnPoint(at: point, with: mode, and: exposureMode)
@@ -203,7 +251,6 @@ extension SPCameraEngine: SPCameraSystemAbility {
     
     func toggleCamera() {
         self.camera.toggleCamera()
-        
         sessionQueue.async {
             do {
                 let videoDeviceInput = try AVCaptureDeviceInput(device: self.camera.currentDevice)
@@ -217,8 +264,7 @@ extension SPCameraEngine: SPCameraSystemAbility {
                     self.captureSession.addInput(self.captureDeviceInput)
                 }
                 self.captureSession.commitConfiguration()
-                self.delegate?.toggleCamera(to: self.camera.currentCameraPosition)
-                
+                self.delegate?.cameraEngine(toggle: self.cameraPosition)
             } catch let error {
                 debugPrint("toggle camera error: \(error)")
             }
@@ -227,6 +273,25 @@ extension SPCameraEngine: SPCameraSystemAbility {
     
     func setFlashMode(_ mode: AVCaptureDevice.FlashMode) {
         self.camera.setFlashMode(mode)
+    }
+    
+    func setZoomFactor(_ value: CGFloat) {
+        self.camera.setZoomFactor(value)
+    }
+    
+    func switchFocusMode(_ mode: AVCaptureDevice.FocusMode) {
+        self.camera.switchFocusMode(mode)
+    }
+}
+
+extension SPCameraEngine {
+    
+    public var showGrid: Bool {
+        return previewView.showGrid
+    }
+    
+    public func togglePreviewGrid() {
+        self.previewView.toggleGrid()
     }
 }
 
@@ -264,7 +329,7 @@ extension SPCameraEngine {
             }
             
         } catch {
-            setupResult = .configurationFailed
+            cameraStatus = .configurationFailed
             captureSession.commitConfiguration()
             print("Setup capture session error: \(error)")
         }
@@ -301,8 +366,47 @@ extension SPCameraEngine {
     
     public func capturePhoto(with delegate: SPCapturePhotoCaptureDelegate) {
         
-//        let videoPreviewLayerOrientation = previewView.videoPreviewLayer.connection?.videoOrientation
-//        sleep(UInt32(self.delayTime))
+        // Haptic feedback
+        feedbackGenerator = UISelectionFeedbackGenerator()
+        feedbackGenerator?.prepare()
+        feedbackGenerator?.selectionChanged()
+        
+        // Get preview video orientation
+        if let connection = photoDataOutput.connection(with: .video), let videoPreviewLayerOrientation = self.previewView.videoPreviewLayer.connection?.videoOrientation {
+            connection.videoOrientation = videoPreviewLayerOrientation
+        }
+        
+        sessionQueue.async {[weak self] in
+            guard let output = self?.photoDataOutput else {return}
+            var settings = AVCapturePhotoSettings()
+            
+            if let isRAW = self?.isRAWSupported {
+                if isRAW {
+                    let query = {AVCapturePhotoOutput.isBayerRAWPixelFormat($0)}
+                    //
+                    guard let rawFormat = output.availableRawPhotoPixelFormatTypes.first(where: query) else {
+                        fatalError("No RAW format found.")
+                    }
+                    
+                    if output.availablePhotoCodecTypes.contains(.hevc) {
+                        let processedFormat = [AVVideoCodecKey: AVVideoCodecType.jpeg]
+                        settings = AVCapturePhotoSettings(rawPixelFormatType: rawFormat, processedFormat: processedFormat)
+                    }
+                } else {
+                    settings.isHighResolutionPhotoEnabled = true
+                }
+            }
+            
+            
+            
+            if let flashMode = self?.flashMode {
+                settings.flashMode = flashMode
+            }
+            settings.isHighResolutionPhotoEnabled = true
+            delegate.requestedPhotoSettings = settings
+            self?.inProgressPhotoCaptureDelegates[delegate.requestedPhotoSettings.uniqueID] = delegate
+            self?.photoDataOutput.capturePhoto(with: settings, delegate: delegate)
+        }
         
 //        sessionQueue.async {[weak self] in
 //            var settings: AVCapturePhotoSettings!

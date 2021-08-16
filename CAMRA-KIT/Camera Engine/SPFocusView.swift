@@ -7,7 +7,11 @@
 
 import UIKit
 
-class FocusView: UIView {
+class SPFocusView: UIView {
+    
+    convenience init(location: CGPoint) {
+        self.init(location: location, size: CGSize(width: 80, height: 80))
+    }
     
     convenience init(location: CGPoint, size: CGSize) {
         self.init()
@@ -15,7 +19,6 @@ class FocusView: UIView {
     }
     
     private func setupUI(location: CGPoint, size: CGSize) {
-        
         self.frame = CGRect(x: location.x - size.width / 2, y: location.y - size.height / 2, width: size.width, height: size.height)        
         self.backgroundColor = .clear
         self.layer.cornerRadius = 5
@@ -44,7 +47,7 @@ class FocusView: UIView {
         
     }
     
-    public func dismissAnimate(completionHandler: ((FocusView) -> Void)? = nil) {
+    public func dismissAnimate(completionHandler: ((SPFocusView) -> Void)? = nil) {
         UIView.animate(withDuration: 1, animations: {
             self.transform = CGAffineTransform(scaleX: 100, y: 100)
             self.alpha = 0
@@ -54,9 +57,4 @@ class FocusView: UIView {
             }
         })
     }
-    
-    
-    
-    
-
 }

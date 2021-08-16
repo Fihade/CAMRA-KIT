@@ -17,11 +17,9 @@ class SPCamera {
         case AppleRAW
     }
     
-   
     // Related to RAW
     public var rawMode: RAWMode = .DNG
     public var rawOrMax = false
-//    public var isRAWSupported = true
     
     // Related to Focus/Flash
     public var isFlashAvailable: Bool!{
@@ -52,28 +50,31 @@ class SPCamera {
         position: .unspecified
     )
     
-    public var currentDevice: AVCaptureDevice! {
+    private(set) public var currentDevice: AVCaptureDevice! {
         didSet {
-            isRAWSupported = (currentCameraPosition == .back)
+            // setup RAW support
+            if (currentCameraType == .builtInWideAngleCamera || currentCameraType == .builtInTelephotoCamera || currentCameraType == .builtInUltraWideCamera) && currentCameraPosition == .back {
+                _isRAWSupported = true
+            } else {
+                _isRAWSupported = false
+            }
+            
+            // setup camera parameters
             if oldValue != currentDevice {
                 setupCameraParameters(about: currentDevice)
             }
         }
     }
     
-    // Camera Device parametes
-    private(set) public var isRAWSupported = true
+    //MARK: Camera Device parametes
     private(set) public var RAWMode: RAWMode = .DNG
-    private var _maxBias: Float!
-    private var _minBias: Float!
-    private var _bias: Float!
-    private(set) public var currBias: Float!
+    private var _maxBias: Float = 8.0
+    private var _minBias: Float = -8.0
+    private var _bias: Float = 0.0
     private var _flashMode: AVCaptureDevice.FlashMode!
-    private(set) public var focusMode: AVCaptureDevice.FocusMode!
-    private(set) public var exposureMode: AVCaptureDevice.ExposureMode!
-    
-    
-    
+    private var _focusMode: AVCaptureDevice.FocusMode!
+    private var _exposureMode: AVCaptureDevice.ExposureMode!
+    private var _isRAWSupported: Bool!
     
     //MARK: init camera and setup
     convenience init() {
@@ -85,11 +86,9 @@ class SPCamera {
         self.currentCameraType = cameraType
         
         self.setupCamera()
-        
-        print("camera focus mode: \(currentDevice.focusMode.rawValue)")
     }
     
-    //Setup current camera device
+    //MARK: Setup current camera device
     private func setupCamera() {
         let devices = videoDeviceDiscoverySession.devices
         
@@ -107,14 +106,12 @@ class SPCamera {
     
     //configure camera parameters
     private func setupCameraParameters(about device: AVCaptureDevice) {
-        focusMode = .continuousAutoFocus
+        _focusMode = .continuousAutoFocus
         _maxBias = device.maxExposureTargetBias
         _minBias = device.minExposureTargetBias
+        _bias = 0.0
         _flashMode = .off
-        // Set Raw supported
-        isRAWSupported = (currentCameraPosition == .back)
-        focusMode = .continuousAutoFocus
-        exposureMode = .continuousAutoExposure
+        _exposureMode = .continuousAutoExposure
         _maxZoom = device.maxAvailableVideoZoomFactor
         _minZoom = device.minAvailableVideoZoomFactor
     }
@@ -122,18 +119,29 @@ class SPCamera {
 
 //MARK: Operations Of Camera
 extension SPCamera: SPCameraSystemAbility {
-
-    
-    var flashMode: AVCaptureDevice.FlashMode { return _flashMode }
     
     var maxBias: Float { return _maxBias }
-    var minBias: Float { return _minBias }
-    var bias: Float { return _bias }
+    var minBias: Float { return _maxBias }
+    var bias: Float { return currentDevice.exposureTargetBias }
+
+    var isRAWSupported: Bool { return _isRAWSupported}
+    var flashMode: AVCaptureDevice.FlashMode { return _flashMode }
+    var focusMode: AVCaptureDevice.FocusMode { return _focusMode }
+    var exposureMode: AVCaptureDevice.ExposureMode { return _exposureMode }
+    var cameraPosition: AVCaptureDevice.Position { return currentCameraPosition }
+    var cameraType: AVCaptureDevice.DeviceType { return currentCameraType }
     
     // toggle camera position: back -> front and front -> back
     func toggleCamera() {
         currentCameraPosition = (currentCameraPosition == .back) ? .front : .back
         setupCamera()
+    }
+    
+    // Set camera zoom factor
+    func setZoomFactor(_ value: CGFloat) {
+        operateCameraWith(processer: {device in
+            device.videoZoomFactor = value
+        })
     }
     
     // Focus on screen at point that you tapped
@@ -148,13 +156,13 @@ extension SPCamera: SPCameraSystemAbility {
             if device.isFocusPointOfInterestSupported && device.isFocusModeSupported(focusMode) {
                 device.focusPointOfInterest = point
                 device.focusMode = focusMode
-                self.focusMode = focusMode
+                _focusMode = focusMode
             }
             
             if device.isExposurePointOfInterestSupported && device.isExposureModeSupported(exposureMode) {
                 device.exposurePointOfInterest = point
                 device.exposureMode = exposureMode
-                self.exposureMode = exposureMode
+                _exposureMode = exposureMode
             }
             //
             device.isSubjectAreaChangeMonitoringEnabled = true
@@ -163,10 +171,11 @@ extension SPCamera: SPCameraSystemAbility {
         }
     }
     
-    //Set camera Auto Focus
+    //Auto Focus
     func focusAutomaticlly() {
         focusOnPoint(at: CGPoint(x: 0.5, y: 0.5), with: .continuousAutoFocus, and: .continuousAutoExposure)
-        self.focusMode = .continuousAutoFocus
+        _focusMode = .continuousAutoFocus
+        _exposureMode = .continuousAutoExposure
     }
     
     //Adjust to camera's len position
@@ -198,17 +207,36 @@ extension SPCamera: SPCameraSystemAbility {
         })
     }
     
-    //Set Camera Bias like EV value
+    //Set Camera Bias with EV value
     func setCameraBias(_ bias: Float) {
-        _bias = bias
+        var tmp: Float = bias
+        if bias > _maxBias {
+            tmp = _maxBias
+        } else if bias < _minBias {
+            tmp = minBias
+        }
         operateCameraWith(processer: {device in
-            device.setExposureTargetBias(bias)
+            device.setExposureTargetBias(tmp)
         })
     }
     
     //Set Camerea Flash Mode like: on/off/auto
     func setFlashMode(_ mode: AVCaptureDevice.FlashMode) {
         _flashMode = mode
+    }
+    
+    func switchFocusMode(_ mode: AVCaptureDevice.FocusMode) {
+        self.operateCameraWith(processer: {device in
+            if mode == .continuousAutoFocus {
+                self.focusAutomaticlly()
+            } else {
+                if device.isFocusModeSupported(mode) {
+                    device.focusMode = mode
+                } else {
+                    self.focusAutomaticlly()
+                }
+            }
+        })
     }
     
     //Do any operation need to lock and unlock device for configure

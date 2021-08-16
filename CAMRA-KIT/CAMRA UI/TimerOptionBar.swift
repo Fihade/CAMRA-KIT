@@ -124,7 +124,6 @@ class TimerOptionBar: UIView {
         label.textColor = .white
         stackView.setCustomSpacing(30, after: label)
         
-        
         let closeButton = TimerButton(timer: Timer.default)
         closeButton.tapEvent = { sender in
             self.timer = sender

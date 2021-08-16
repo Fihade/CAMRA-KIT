@@ -50,8 +50,6 @@ class CaptureButton: UIView {
     override func didMoveToWindow() {
         button.layer.mask = maskLayer
         button.imageView!.layer.addSublayer(circleLayer)
-//        button.layer.addSublayer(circleLayer)
-
     }
     
     override func layoutSubviews() {
