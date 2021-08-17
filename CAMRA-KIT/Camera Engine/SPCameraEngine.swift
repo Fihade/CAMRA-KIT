@@ -28,6 +28,8 @@ extension Float {
     func cameraEngine(toggle position: AVCaptureDevice.Position)
 }
 
+// Note: imagining how we use the real camera like Sony、Fuji... SPCameraEngine not only has SPCamera, but also has preview、focus view.
+// Theses components are wrappered in camera Engine that can make the workflow more like incorporation and reduce error to use the engine.
 class SPCameraEngine: NSObject {
     
     private enum CameraPermissionStatus {
@@ -163,7 +165,6 @@ class SPCameraEngine: NSObject {
 //MARK: Related to gestures of preview
 extension SPCameraEngine {
     
-    
     private func addGestureToPreviewView() {
         guard let preview = previewView else { return }
         
@@ -220,7 +221,8 @@ extension SPCameraEngine {
 
 //MARK: SPCameraSystemAbility protocol
 extension SPCameraEngine: SPCameraSystemAbility {
-    
+    // NOTE: apply to SPCameraSystemAbility because SPCameraEngine will be exposed to outside to use SPCamera ability like check out parameters or operate the camera.
+    // SPCameraEngine will save camera engine to only do itself work just like real camera's work flow that we usually use.
     var minBias: Float { return camera.minBias }
     var maxBias: Float { return camera.maxBias }
     var bias: Float { return camera.bias }
