@@ -8,8 +8,6 @@
 import Foundation
 import AVFoundation
 
-
-
 class SPCamera {
     
     public enum RAWMode {
@@ -34,31 +32,32 @@ class SPCamera {
     private var _zoomFactor: CGFloat = 1.0
     
     // Camera's status
-    private(set) public var currentCameraPosition: AVCaptureDevice.Position!
-    private(set) public var currentCameraType: AVCaptureDevice.DeviceType!
+    private(set) public var _position: AVCaptureDevice.Position!
+    private(set) public var _type: AVCaptureDevice.DeviceType!
     
 //    private var backCameraDevice: AVCaptureDevice?
 //    private var frontCameraDevice: AVCaptureDevice?
     
-    private lazy var videoDeviceDiscoverySession = AVCaptureDevice.DiscoverySession(
-        deviceTypes: [
-            .builtInTelephotoCamera,
-            .builtInWideAngleCamera,
-            .builtInUltraWideCamera,
-        ],
+    private lazy var backAvailableCaptureDevices = AVCaptureDevice.DiscoverySession(
+        deviceTypes: [.builtInWideAngleCamera, .builtInTelephotoCamera, .builtInUltraWideCamera],
         mediaType: .video,
-        position: .unspecified
+        position: .back
+    )
+
+    private lazy var frontAvailableCaptureDevices = AVCaptureDevice.DiscoverySession(
+        deviceTypes: [.builtInWideAngleCamera, .builtInTelephotoCamera, .builtInUltraWideCamera],
+        mediaType: .video,
+        position: .front
     )
     
     private(set) public var currentDevice: AVCaptureDevice! {
         didSet {
             // setup RAW support
-            if (currentCameraType == .builtInWideAngleCamera || currentCameraType == .builtInTelephotoCamera || currentCameraType == .builtInUltraWideCamera) && currentCameraPosition == .back {
+            if (_type == .builtInWideAngleCamera || _type == .builtInTelephotoCamera || _type == .builtInUltraWideCamera) && _position == .back {
                 _isRAWSupported = true
             } else {
                 _isRAWSupported = false
             }
-            
             // setup camera parameters
             if oldValue != currentDevice {
                 setupCameraParameters(about: currentDevice)
@@ -66,7 +65,7 @@ class SPCamera {
         }
     }
     
-    //MARK: Camera Device parametes
+    // camera Device parametes
     private(set) public var RAWMode: RAWMode = .DNG
     private var _maxBias: Float = 8.0
     private var _minBias: Float = -8.0
@@ -76,31 +75,32 @@ class SPCamera {
     private var _exposureMode: AVCaptureDevice.ExposureMode!
     private var _isRAWSupported: Bool!
     
-    //MARK: init camera and setup
+    // init camera and setup
     convenience init() {
         self.init(position: .back, cameraType: .builtInWideAngleCamera)
     }
     
     public init(position: AVCaptureDevice.Position = .back, cameraType: AVCaptureDevice.DeviceType = .builtInWideAngleCamera) {
-        self.currentCameraPosition = position
-        self.currentCameraType = cameraType
-        
+        self._position = position
+        self._type = cameraType
         self.setupCamera()
     }
     
-    //MARK: Setup current camera device
+    // setup current camera device
     private func setupCamera() {
-        let devices = videoDeviceDiscoverySession.devices
-        
-        //Set whether contains current type and position
-        if let device = devices.first(where: {($0.deviceType == currentCameraType && $0.position == currentCameraPosition)}) {
-            currentDevice = device
-            return
+        var devices: [AVCaptureDevice] = []
+        if _position == .back {
+            devices = backAvailableCaptureDevices.devices
+        } else {
+            devices = frontAvailableCaptureDevices.devices
         }
-        //Set default wide angle camera
-        if let device = devices.first(where: {($0.position == currentCameraPosition && $0.deviceType == .builtInWideAngleCamera)}) {
+        // get a wide angle camera device, if the iPhone/ iPad / Mac have no type of camera.
+        guard let defaultDevice = devices.first(where: {$0.deviceType == .builtInWideAngleCamera}) else { return }
+        // setup current device
+        if let device = devices.first(where: {$0.deviceType == _type}) {
             currentDevice = device
-            return
+        } else {
+            currentDevice = defaultDevice
         }
     }
     
@@ -128,12 +128,12 @@ extension SPCamera: SPCameraSystemAbility {
     var flashMode: AVCaptureDevice.FlashMode { return _flashMode }
     var focusMode: AVCaptureDevice.FocusMode { return _focusMode }
     var exposureMode: AVCaptureDevice.ExposureMode { return _exposureMode }
-    var cameraPosition: AVCaptureDevice.Position { return currentCameraPosition }
-    var cameraType: AVCaptureDevice.DeviceType { return currentCameraType }
+    var cameraPosition: AVCaptureDevice.Position { return _position }
+    var cameraType: AVCaptureDevice.DeviceType { return _type }
     
     // toggle camera position: back -> front and front -> back
     func toggleCamera() {
-        currentCameraPosition = (currentCameraPosition == .back) ? .front : .back
+        _position = (_position == .back) ? .front : .back
         setupCamera()
     }
     
@@ -220,11 +220,14 @@ extension SPCamera: SPCameraSystemAbility {
         })
     }
     
-    //Set Camerea Flash Mode like: on/off/auto
+    // Set Camerea Flash Mode like: on/off/auto
     func setFlashMode(_ mode: AVCaptureDevice.FlashMode) {
-        _flashMode = mode
+        if isFlashAvailable {
+            _flashMode = mode
+        }
     }
     
+    // Switch camera focus mode: auto focus or manual focus mode
     func switchFocusMode(_ mode: AVCaptureDevice.FocusMode) {
         self.operateCameraWith(processer: {device in
             if mode == .continuousAutoFocus {

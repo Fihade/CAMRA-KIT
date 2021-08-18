@@ -20,9 +20,13 @@
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="PGC-h0-eOr">
                                 <rect key="frame" x="0.0" y="0.0" width="375" height="36"/>
                                 <subviews>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="0.0" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="OiO-at-Aj3" customClass="EVLabel" customModule="CAMRA_KIT" customModuleProvider="target">
-                                        <rect key="frame" x="328.66666666666669" y="7.9999999999999982" width="26.333333333333314" height="20.333333333333329"/>
-                                        <fontDescription key="fontDescription" type="boldSystem" pointSize="17"/>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="OiO-at-Aj3" customClass="EVLabel" customModule="CAMRA_KIT" customModuleProvider="target">
+                                        <rect key="frame" x="310" y="8" width="45" height="20"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="20" id="bUy-m9-XH4"/>
+                                            <constraint firstAttribute="width" constant="45" id="doN-pb-RBk"/>
+                                        </constraints>
+                                        <fontDescription key="fontDescription" type="boldSystem" pointSize="23"/>
                                         <color key="textColor" name="HighlightedColor"/>
                                         <nil key="highlightedColor"/>
                                     </label>

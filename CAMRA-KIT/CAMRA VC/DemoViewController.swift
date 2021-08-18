@@ -11,7 +11,7 @@ import Accelerate
 
 class DemoViewController: UIViewController {
 
-    private var mainView: PreviewView!
+    private var mainView: SPPreviewView!
     private var bottomSheet: BottomSheetView!
     private var imageView: UIImageView!
     private var menuSheet: MenuSheetView!
@@ -68,7 +68,7 @@ class DemoViewController: UIViewController {
         self.view.backgroundColor = .black
   
         //setup main view
-        mainView = PreviewView()
+        mainView = SPPreviewView()
         
         mainView.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(mainView)

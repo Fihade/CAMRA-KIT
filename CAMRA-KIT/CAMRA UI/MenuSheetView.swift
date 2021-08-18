@@ -33,7 +33,7 @@ class MenuSheetView: UIView {
     var feedbackGenerator : UISelectionFeedbackGenerator? = nil
     
     // subViews
-    private var dragBar: UIImageView!
+    private var bar: UIButton!
     private var gridButton: UIButton!
     private var flashButton: UIButton!
     private var toggleCameraButton: UIButton!
@@ -58,41 +58,173 @@ class MenuSheetView: UIView {
         addObservers()
     }
     
+}
+
+// MenuSheetView KVO
+extension MenuSheetView {
+    
+    private func addObservers() {
+        NotificationCenter.default.addObserver(
+            forName: .TimerDidSelected,
+            object: nil, queue: .main,
+            using: {_ in
+                if self.timerOptionBar.timer == .default {
+                    self.timerButton.setImage(UIImage(systemName: "timer"), for: .normal)
+                } else {
+                    self.timerButton.setImage(UIImage(named: self.timerOptionBar.timer.hightlightIcon), for: .normal)
+                }
+            }
+        )
+        
+        NotificationCenter.default.addObserver(
+            forName: .AWBDidSelected,
+            object: .none, queue: .main,
+            using: {_ in
+                if self.whiteBalanceOptionBar.whiteBalance == .default {
+                    self.awbButton.isSelected = false
+                } else {
+                    self.awbButton.setImage(UIImage(named: self.whiteBalanceOptionBar.whiteBalance.highlightIcon), for: .selected)
+                    self.awbButton.isSelected = true
+                }
+            }
+        )
+    }
+}
+
+// Button Action
+extension MenuSheetView {
+    
+    // Attach to Subutton Action
+    private func addButtonTarget() {
+        self.gridButton.addTarget(self, action: #selector(showGrid), for: .touchUpInside)
+        self.toggleCameraButton.addTarget(self, action: #selector(toggleCamera), for: .touchUpInside)
+        self.flashButton.addTarget(self, action: #selector(setFlashMode), for: .touchUpInside)
+        self.timerButton.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(selectTimer)))
+        self.awbButton.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(selectAWB)))
+    }
+    
+    // Show grid
+    @objc private func showGrid(_ sender: UIButton) {
+        sender.isSelected.toggle()
+        delegate?.showGirdView(using: sender)
+    }
+    
+    // Toggle Camera
+    @objc private func toggleCamera(_ sender: UIButton) {
+        delegate?.toggleCamera()
+    }
+    
+    // Set Flash Mode
+    @objc private func setFlashMode(_ sender: UIButton) {
+        delegate?.setFlashMode(using: sender)
+    }
+    
+    @objc private func selectTimer() {
+//        optionWillSelectedAnimate()
+        timerOptionBar.appear()
+    }
+    
+    @objc private func selectAWB() {
+//        optionWillSelectedAnimate()
+        whiteBalanceOptionBar.appear()
+    }
+}
+
+// Drag pull gesture
+extension MenuSheetView {
+    
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        feedbackGenerator = UISelectionFeedbackGenerator()
+        feedbackGenerator?.prepare()
+        feedbackGenerator?.selectionChanged()
+
+        bar.isHighlighted = true
+    }
+
+    // Swipe Up Gesture
+    override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
+        feedbackGenerator?.prepare()
+        for touch in touches {
+            let distance = touch.previousLocation(in: self).y - touch.location(in: self).y
+            
+            if distance > 0 {
+                self.transform = CGAffineTransform(
+                    translationX: 0,
+                    y: transform.ty > -40 ? transform.ty - distance : -40)
+            } else {
+                if transform.ty  < 0 {
+                    transform = CGAffineTransform(translationX: 0, y: transform.ty - distance > 0 ? 0 : transform.ty - distance)
+                }
+                
+            }
+        }
+    }
+    
+    override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
+        bar.isHighlighted = false
+        if -transform.ty < 90 / 4 {
+            UIView.animate(
+                withDuration: 0.3,
+                animations: {self.transform = CGAffineTransform(translationX: 0, y: 0)},
+                completion: {_ in
+                    self.feedbackGenerator?.selectionChanged()
+                    self.feedbackGenerator = nil
+                })
+        } else {
+            UIView.animate(
+                withDuration: 0.3,
+                animations: { self.transform = CGAffineTransform(translationX: 0, y: -40)},
+                completion: {_ in
+                    
+                    self.feedbackGenerator?.selectionChanged()
+                    self.feedbackGenerator = nil
+                })
+        }
+        
+
+    }
+}
+
+// related to layout and UI
+extension MenuSheetView {
+    
+    private var dragBar: UIButton {
+        let bar = UIButton()
+        bar.tintColor = .white
+        bar.setImage(UIImage(systemName: "minus"), for: .normal)
+        bar.setImage(UIImage(systemName: "chevron.compact.down"), for: .highlighted)
+        bar.setPreferredSymbolConfiguration(.init(pointSize: 15, weight: .bold), forImageIn: .normal)
+        bar.setPreferredSymbolConfiguration(.init(pointSize: 15, weight: .bold), forImageIn: .highlighted)
+        bar.contentMode = .scaleAspectFill
+        bar.translatesAutoresizingMaskIntoConstraints = false
+        return bar
+    }
+    
     private func setupUI() {
-        dragBar = UIImageView(image: UIImage(systemName: "minus"))
-        dragBar.tintColor = #colorLiteral(red: 0.921431005, green: 0.9214526415, blue: 0.9214410186, alpha: 1)
-        dragBar.preferredSymbolConfiguration = .init(font: UIFont.systemFont(ofSize: 15, weight: .bold))
-        dragBar.translatesAutoresizingMaskIntoConstraints = false
-        dragBar.contentMode = .scaleAspectFill
-        self.addSubview(dragBar)
+        bar = dragBar
+        self.addSubview(bar)
         
         NSLayoutConstraint.activate([
-            dragBar.heightAnchor.constraint(equalToConstant: 7),
-            dragBar.centerXAnchor.constraint(equalTo: self.centerXAnchor),
-            dragBar.topAnchor.constraint(equalTo: self.topAnchor, constant: 3)
+            bar.heightAnchor.constraint(equalToConstant: 7),
+            bar.centerXAnchor.constraint(equalTo: self.centerXAnchor),
+            bar.topAnchor.constraint(equalTo: self.topAnchor, constant: 3)
         ])
         
         gridButton = UIButton(frame: .zero)
-        gridButton.setPreferredSymbolConfiguration(.init(font: UIFont.preferredFont(forTextStyle: .title2)), forImageIn: .normal)
-        gridButton.tintColor = .white
-        gridButton.setImage(UIImage(systemName: "squareshape.split.3x3"), for: .normal)
+        gridButton.setImage(UIImage(named: "grid_normal"), for: .normal)
+        gridButton.setImage(UIImage(named: "grid_highlight"), for: .selected)
         gridButton.translatesAutoresizingMaskIntoConstraints = false
-        gridButton.isUserInteractionEnabled = true
         self.addSubview(gridButton)
         
         flashButton = UIButton()
         flashButton.setPreferredSymbolConfiguration(.init(font: UIFont.preferredFont(forTextStyle: .title2)), forImageIn: .normal)
         flashButton.tintColor = .white
-        flashButton.layer.masksToBounds = true
         flashButton.setImage(UIImage(systemName: "bolt.fill"), for: .normal)
         flashButton.translatesAutoresizingMaskIntoConstraints = false
         self.addSubview(flashButton)
         
         toggleCameraButton = UIButton()
-        toggleCameraButton.setPreferredSymbolConfiguration(
-            .init(font: UIFont.preferredFont(forTextStyle: .title2)),
-            forImageIn: .normal
-        )
+        toggleCameraButton.setPreferredSymbolConfiguration(.init(font: UIFont.preferredFont(forTextStyle: .title2)),forImageIn: .normal)
 
         toggleCameraButton.tintColor = .white
         toggleCameraButton.setImage(UIImage(systemName: "arrow.triangle.2.circlepath.camera.fill"), for: .normal)
@@ -106,7 +238,7 @@ class MenuSheetView: UIView {
             // Layout Guide
             container.heightAnchor.constraint(equalToConstant: 40),
             // Container
-            container.topAnchor.constraint(equalTo: dragBar.bottomAnchor),
+            container.topAnchor.constraint(equalTo: bar.bottomAnchor),
             container.widthAnchor.constraint(equalTo: self.widthAnchor, constant: -20),
             container.centerXAnchor.constraint(equalTo: self.centerXAnchor),
             
@@ -132,8 +264,7 @@ class MenuSheetView: UIView {
         self.addSubview(timerButton)
         
         settingButton = UIButton()
-        settingButton.setPreferredSymbolConfiguration(
-            .init(font: UIFont.preferredFont(forTextStyle: .title2)), forImageIn: .normal)
+        settingButton.setPreferredSymbolConfiguration(.init(font: UIFont.preferredFont(forTextStyle: .title2)), forImageIn: .normal)
         settingButton.tintColor = .white
         settingButton.setImage(UIImage(systemName: "gearshape.fill"), for: .normal)
         settingButton.translatesAutoresizingMaskIntoConstraints = false
@@ -184,7 +315,6 @@ class MenuSheetView: UIView {
             awbButton.heightAnchor.constraint(equalToConstant: 25),
             awbButton.widthAnchor.constraint(equalToConstant: 25),
             
-//            timerOptionBar.widthAnchor.constraint(equalTo: self.widthAnchor),
             timerOptionBar.leadingAnchor.constraint(equalTo: self.leadingAnchor),
             timerOptionBar.trailingAnchor.constraint(equalTo: self.trailingAnchor),
             timerOptionBar.heightAnchor.constraint(equalTo: container1.heightAnchor),
@@ -196,132 +326,7 @@ class MenuSheetView: UIView {
             whiteBalanceOptionBar.topAnchor.constraint(equalTo: container1.topAnchor),
         ])
     }
-}
-
-// MenuSheetView KVO
-extension MenuSheetView {
     
-    private func addObservers() {
-        NotificationCenter.default.addObserver(
-            forName: .TimerDidSelected,
-            object: nil, queue: .main,
-            using: {_ in
-                if self.timerOptionBar.timer == .default {
-                    self.timerButton.setImage(UIImage(systemName: "timer"), for: .normal)
-                } else {
-                    self.timerButton.setImage(UIImage(named: self.timerOptionBar.timer.hightlightIcon), for: .normal)
-                }
-            }
-        )
-        
-        NotificationCenter.default.addObserver(
-            forName: .AWBDidSelected,
-            object: .none, queue: .main,
-            using: {_ in
-                if self.whiteBalanceOptionBar.whiteBalance == .default {
-                    self.awbButton.isSelected = false
-                } else {
-                    self.awbButton.setImage(UIImage(named: self.whiteBalanceOptionBar.whiteBalance.highlightIcon), for: .selected)
-                    self.awbButton.isSelected = true
-                }
-            }
-        )
-    }
-}
-
-// Button Action
-extension MenuSheetView {
-    
-    // Attach to Subutton Action
-    private func addButtonTarget() {
-        self.gridButton.addTarget(self, action: #selector(showGrid), for: .touchUpInside)
-        self.toggleCameraButton.addTarget(self, action: #selector(toggleCamera), for: .touchUpInside)
-        self.flashButton.addTarget(self, action: #selector(setFlashMode), for: .touchUpInside)
-        self.timerButton.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(selectTimer)))
-        self.awbButton.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(selectAWB)))
-    }
-    
-    // Show grid
-    @objc private func showGrid(_ sender: UIButton) {
-        delegate?.showGirdView(using: sender)
-    }
-    
-    // Toggle Camera
-    @objc private func toggleCamera(_ sender: UIButton) {
-        delegate?.toggleCamera()
-    }
-    
-    // Set Flash Mode
-    @objc private func setFlashMode(_ sender: UIButton) {
-        delegate?.setFlashMode(using: sender)
-    }
-    
-    @objc private func selectTimer() {
-//        optionWillSelectedAnimate()
-        timerOptionBar.appear()
-    }
-    
-    @objc private func selectAWB() {
-//        optionWillSelectedAnimate()
-        whiteBalanceOptionBar.appear()
-    }
-}
-
-// Drag pull gesture
-extension MenuSheetView {
-    
-    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-        feedbackGenerator = UISelectionFeedbackGenerator()
-        feedbackGenerator?.prepare()
-        feedbackGenerator?.selectionChanged()
-
-        self.dragBar.image = UIImage(systemName: "minus")
-    }
-
-    // Swipe Up Gesture
-    override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
-        feedbackGenerator?.prepare()
-        for touch in touches {
-            let distance = touch.previousLocation(in: self).y - touch.location(in: self).y
-            
-            if distance > 0 {
-                self.transform = CGAffineTransform(
-                    translationX: 0,
-                    y: transform.ty > -40 ? transform.ty - distance : -40)
-            } else {
-                if transform.ty  < 0 {
-                    transform = CGAffineTransform(translationX: 0, y: transform.ty - distance > 0 ? 0 : transform.ty - distance)
-                }
-                
-            }
-        }
-    }
-    
-    override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
-        
-        if -transform.ty < 90 / 4 {
-            UIView.animate(
-                withDuration: 0.3,
-                animations: {self.transform = CGAffineTransform(translationX: 0, y: 0)},
-                completion: {_ in
-                    self.feedbackGenerator?.selectionChanged()
-                    self.feedbackGenerator = nil
-                })
-        } else {
-            UIView.animate(
-                withDuration: 0.3,
-                animations: { self.transform = CGAffineTransform(translationX: 0, y: -40)},
-                completion: {_ in
-                    self.dragBar.image = UIImage(systemName: "chevron.compact.down")
-                    self.feedbackGenerator?.selectionChanged()
-                    self.feedbackGenerator = nil
-                })
-        }
-        
-    }
-}
-
-extension MenuSheetView {
     public func adjustOrientationFromDevice(_ orientation: UIDeviceOrientation) {
         gridButton.adjustOrientation(orientation: orientation)
         awbButton.adjustOrientation(orientation: orientation)
