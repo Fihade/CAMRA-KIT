@@ -43,7 +43,7 @@ class MenuSheetView: UIView {
     
     private var timerOptionBar: TimerOptionBar!
     private var whiteBalanceOptionBar: WhiteBalanceOptionBar!
-    
+   
     override init(frame: CGRect) {
         super.init(frame: frame)
         setupUI()
@@ -57,7 +57,7 @@ class MenuSheetView: UIView {
         addButtonTarget()
         addObservers()
     }
-    
+
 }
 
 // MenuSheetView KVO
@@ -69,10 +69,12 @@ extension MenuSheetView {
             object: nil, queue: .main,
             using: {_ in
                 if self.timerOptionBar.timer == .default {
-                    self.timerButton.setImage(UIImage(systemName: "timer"), for: .normal)
+                    self.timerButton.isSelected = false
                 } else {
-                    self.timerButton.setImage(UIImage(named: self.timerOptionBar.timer.hightlightIcon), for: .normal)
+                    self.timerButton.setImage(UIImage(named: self.timerOptionBar.timer.hightlightIcon), for: .selected)
+                    self.timerButton.isSelected = true
                 }
+                
             }
         )
         
@@ -116,7 +118,8 @@ extension MenuSheetView {
     
     // Set Flash Mode
     @objc private func setFlashMode(_ sender: UIButton) {
-        delegate?.setFlashMode(using: sender)
+        sender.isSelected.toggle()
+        sender.tintColor = sender.isSelected ? .yellow : .white
     }
     
     @objc private func selectTimer() {
@@ -155,7 +158,6 @@ extension MenuSheetView {
                 if transform.ty  < 0 {
                     transform = CGAffineTransform(translationX: 0, y: transform.ty - distance > 0 ? 0 : transform.ty - distance)
                 }
-                
             }
         }
     }
@@ -175,13 +177,11 @@ extension MenuSheetView {
                 withDuration: 0.3,
                 animations: { self.transform = CGAffineTransform(translationX: 0, y: -40)},
                 completion: {_ in
-                    
                     self.feedbackGenerator?.selectionChanged()
                     self.feedbackGenerator = nil
-                })
+                }
+            )
         }
-        
-
     }
 }
 

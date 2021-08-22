@@ -7,8 +7,9 @@
 
 import UIKit
 import Foundation
+import AVFoundation
 
-protocol BottomSheetViewDelegate: NSObjectProtocol {
+@objc protocol BottomSheetViewDelegate: NSObjectProtocol {
     
     func toggleRAWMode(_ button: RAWButton)
     
@@ -21,6 +22,9 @@ protocol BottomSheetViewDelegate: NSObjectProtocol {
     func setLenPosition(with value: Float)
     
     func switchCameraFocusMode(is ManualFocus: Bool)
+    
+    @objc optional func switchLen(with button: LenButton)
+    
 }
 
 class BottomSheetView: UIView {
@@ -78,10 +82,9 @@ class BottomSheetView: UIView {
         capturedImageView.translatesAutoresizingMaskIntoConstraints = false
         self.addSubview(capturedImageView)
         
-//        lenButton = LenButton()
-//        lenButton.setName("1x")
-//        lenButton.translatesAutoresizingMaskIntoConstraints = false
-//        self.addSubview(lenButton)
+        lenButton = LenButton()
+        lenButton.translatesAutoresizingMaskIntoConstraints = false
+        self.addSubview(lenButton)
         
         rawButton = RAWButton()
         rawButton.layer.masksToBounds = true
@@ -106,22 +109,22 @@ class BottomSheetView: UIView {
             capturedImageView.centerYAnchor.constraint(equalTo: lowHalfArea.centerYAnchor),
             capturedImageView.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: 10),
             
-//            lenButton.centerYAnchor.constraint(equalTo: lowHalfArea.centerYAnchor),
-//            lenButton.heightAnchor.constraint(equalToConstant: 30),
-//            lenButton.widthAnchor.constraint(equalToConstant: 30),
-//            lenButton.trailingAnchor.constraint(equalTo: self.leadingAnchor),
-            
+        
             rawButton.trailingAnchor.constraint(equalTo: lowHalfArea.trailingAnchor, constant: -10),
             rawButton.centerYAnchor.constraint(equalTo: lowHalfArea.centerYAnchor),
             rawButton.heightAnchor.constraint(equalToConstant: 15),
             rawButton.widthAnchor.constraint(equalToConstant: 31),
+            
+            lenButton.centerYAnchor.constraint(equalTo: lowHalfArea.centerYAnchor),
+            lenButton.heightAnchor.constraint(equalToConstant: 30),
+            lenButton.widthAnchor.constraint(equalToConstant: 30),
+            lenButton.trailingAnchor.constraint(equalTo: rawButton.leadingAnchor, constant: -20),
             
         ])
         
         let topHalfArea = UILayoutGuide()
         self.addLayoutGuide(topHalfArea)
         
-        //
         focusModeButton = UIButton()
         focusModeButton.setTitle("AF", for: .normal)
         focusModeButton.setTitleColor(expand ? .white : .yellow, for: .normal)
@@ -201,9 +204,7 @@ class BottomSheetView: UIView {
             self.focusModeButton.setTitleColor(self.expand ? .white : .yellow, for: .normal)
             self.focusModeButton.layer.borderColor = self.expand ? UIColor.white.cgColor : UIColor.yellow.cgColor
         })
-        
     }
-    
 }
 
 //MARK: Operations in BottomSheetView
@@ -212,8 +213,8 @@ extension BottomSheetView {
     // Set Button GestureRecognizer
     private func attachBottomSheetView() {
         rawButton.addTarget(self, action: #selector(tapRAW), for: .touchDown)
-//        lenButton.addTarget(self, action: #selector(tapLen), for: .touchDown)
-        captureButton.addTarget(self, action: #selector(tapCapture), for: .touchDown)
+        lenButton.addTarget(self, action: #selector(tapLen(_:)), for: .touchDown)
+        captureButton.addTarget(self, action: #selector(capture(_:)), for: .touchDown)
         capturedImageView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(tap(_:))))
     }
     
@@ -222,10 +223,11 @@ extension BottomSheetView {
     }
     
     @objc private func tapLen(_ sender: LenButton) {
-        delegate?.toggleLen(sender)
+        print("tap len")
+        delegate?.switchLen?(with: sender)
     }
     
-    @objc private func tapCapture(_ sender: UIButton) {
+    @objc private func capture(_ sender: UIButton) {
         delegate?.capturePhoto()
     }
     

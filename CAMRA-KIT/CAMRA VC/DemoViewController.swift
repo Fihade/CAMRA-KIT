@@ -211,9 +211,14 @@ extension DemoViewController: BottomSheetViewDelegate {
             with: button, duration: 0.3,
             options: [.transitionFlipFromLeft, .curveEaseInOut],
             animations: {
-                button.getNextLen()
+//                button.getNextLen()
             }
         )
+    }
+    
+    func switchLen(with button: LenButton) {
+        button.lens = Lens(lens: cameraEngine.availableCameraTypes, current: cameraEngine.cameraType)
+        button.turnNextLen()
     }
     
     func capturePhoto() {

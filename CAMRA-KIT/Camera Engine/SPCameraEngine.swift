@@ -129,25 +129,6 @@ class SPCameraEngine: NSObject {
         }
     }
     
-//    private func setRaw(_ raw: Bool) {
-//        self.rawOrMax = raw
-//        if raw {
-//            do {
-//                try currentCamera?.lockForConfiguration()
-//                self.currentCamera?.videoZoomFactor = 1.0
-//                if let pinchRecognizer = pinchRecognizer {
-//                    self.previewView?.removeGestureRecognizer(pinchRecognizer)
-//
-//                }
-//                currentCamera?.unlockForConfiguration()
-//            } catch  {
-//                fatalError()
-//            }
-//        } else {
-//            attachZoom(to: previewView!)
-//        }
-//    }
-    
     private func observe() {
         NotificationCenter.default.addObserver(
             forName: .AVCaptureDeviceSubjectAreaDidChange,
@@ -156,7 +137,6 @@ class SPCameraEngine: NSObject {
                 print("AVCaptureDeviceSubjectAreaDidChange")
                 self.focusView?.removeFromSuperview()
                 self.focusAutomaticlly()
-                
             }
         )
     }
@@ -181,7 +161,9 @@ extension SPCameraEngine {
     
     @objc private func tapFocus(_ recognizer: UITapGestureRecognizer) {
         
-        feedbackGenerator = UISelectionFeedbackGenerator()
+        if(feedbackGenerator == nil) {
+            feedbackGenerator = UISelectionFeedbackGenerator()
+        }
         feedbackGenerator?.prepare()
         (feedbackGenerator as? UISelectionFeedbackGenerator)?.selectionChanged()
         
@@ -208,17 +190,14 @@ extension SPCameraEngine {
         
     }
     
-//    private func tappedFocus(on view: UIView, at location: CGPoint) {
-//
-//    }
-    
     @objc private func swipUpPreview(_ recogizer: UIPanGestureRecognizer) {
         guard let view = recogizer.view else {return}
         switch recogizer.state {
             case .began:
-                feedbackGenerator = UISelectionFeedbackGenerator()
+                if(feedbackGenerator == nil) {
+                    feedbackGenerator = UISelectionFeedbackGenerator()
+                }
                 feedbackGenerator?.prepare()
-                
                 beganPanY = recogizer.translation(in: view).y
                 beganPanBias = bias
             case .changed:
@@ -226,6 +205,7 @@ extension SPCameraEngine {
                 let height = view.bounds.height
                 var value = beganPanBias - Float((sy - beganPanY) / height) * maxBias
                 value.oneDecimals()
+                // EV only .f
                 var tmp = bias
                 tmp.oneDecimals()
                 if value != tmp {
@@ -243,13 +223,14 @@ extension SPCameraEngine {
 extension SPCameraEngine: SPCameraSystemAbility {
     // NOTE: apply to SPCameraSystemAbility because SPCameraEngine will be exposed to outside to use SPCamera ability like check out parameters or operate the camera.
     // SPCameraEngine will save camera engine to only do itself work just like real camera's work flow that we usually use.
+    var bias: Float { return camera.bias }
     var minBias: Float { return camera.minBias }
     var maxBias: Float { return camera.maxBias }
-    var bias: Float { return camera.bias }
+    var isRAWSupported: Bool { return camera.isRAWSupported }
     var flashMode: AVCaptureDevice.FlashMode { return camera.flashMode }
     var cameraPosition: AVCaptureDevice.Position { return camera.cameraPosition }
-    
-    var isRAWSupported: Bool { return camera.isRAWSupported }
+    var cameraType: AVCaptureDevice.DeviceType {return camera.cameraType}
+    var availableCameraTypes: [AVCaptureDevice.DeviceType] { return camera.availableCameraTypes }
     
     func focusOnPoint(at point: CGPoint, with mode: AVCaptureDevice.FocusMode, and exposureMode: AVCaptureDevice.ExposureMode) {
         self.camera.focusOnPoint(at: point, with: mode, and: exposureMode)
@@ -308,17 +289,6 @@ extension SPCameraEngine: SPCameraSystemAbility {
     }
 }
 
-extension SPCameraEngine {
-    
-    public var showGrid: Bool {
-        return previewView.showGrid
-    }
-    
-    public func togglePreviewGrid() {
-        self.previewView.toggleGrid()
-    }
-}
-
 //MARK: Setup CaptureSession
 extension SPCameraEngine {
     
@@ -362,7 +332,7 @@ extension SPCameraEngine {
     }
 }
 
-//MARK: Setup Preview
+//MARK: Operations about preview view
 extension SPCameraEngine {
     
     // add preview
@@ -382,6 +352,12 @@ extension SPCameraEngine {
             }
             videoPreviewLayerConnection.videoOrientation = newVideoOrientation
         }
+    }
+    
+    var showGrid: Bool { return previewView.showGrid }
+    
+    public func togglePreviewGrid() {
+        self.previewView.toggleGrid()
     }
 }
 

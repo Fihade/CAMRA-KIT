@@ -19,6 +19,14 @@ class EVLabel: UILabel {
             
         }
     }
+    
+//    private var lens: Lens!
+//    
+//    convenience init(lens: Lens) {
+//        self.init()
+//        self.lens = lens
+//    }
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
         setupUI()

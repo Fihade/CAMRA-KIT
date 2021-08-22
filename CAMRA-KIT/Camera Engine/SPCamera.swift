@@ -32,8 +32,8 @@ class SPCamera {
     private var _zoomFactor: CGFloat = 1.0
     
     // Camera's status
-    private(set) public var _position: AVCaptureDevice.Position!
-    private(set) public var _type: AVCaptureDevice.DeviceType!
+    private var _position: AVCaptureDevice.Position!
+    private var _type: AVCaptureDevice.DeviceType!
     
 //    private var backCameraDevice: AVCaptureDevice?
 //    private var frontCameraDevice: AVCaptureDevice?
@@ -130,6 +130,13 @@ extension SPCamera: SPCameraSystemAbility {
     var exposureMode: AVCaptureDevice.ExposureMode { return _exposureMode }
     var cameraPosition: AVCaptureDevice.Position { return _position }
     var cameraType: AVCaptureDevice.DeviceType { return _type }
+    var availableCameraTypes: [AVCaptureDevice.DeviceType] {
+        if _position == .back {
+            return backAvailableCaptureDevices.devices.map{ $0.deviceType }
+        } else {
+            return frontAvailableCaptureDevices.devices.map{ $0.deviceType}
+        }
+    }
     
     // toggle camera position: back -> front and front -> back
     func toggleCamera() {

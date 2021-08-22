@@ -12,7 +12,7 @@ import AVFoundation
 class SPPreviewView: UIView {
 
     // Video gravity. Default is Aspect
-    var videoGravity: AVLayerVideoGravity = .resize {
+    var videoGravity: AVLayerVideoGravity = .resizeAspectFill {
         didSet {
             videoPreviewLayer.videoGravity = videoGravity
         }

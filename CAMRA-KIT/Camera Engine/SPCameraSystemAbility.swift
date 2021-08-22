@@ -41,5 +41,6 @@ enum CaptureFormat {
     @objc optional var exposureMode: AVCaptureDevice.ExposureMode {get}
     @objc optional var cameraPosition: AVCaptureDevice.Position {get}
     @objc optional var cameraType: AVCaptureDevice.DeviceType { get }
+    @objc optional var availableCameraTypes: [AVCaptureDevice.DeviceType] { get }
     
 }
