@@ -415,11 +415,6 @@ extension SPCameraEngine {
     }
 }
 
-//MARK: add focus gesture to preview
-extension SPCameraEngine {
-
-}
-
 //MARK: Zoom Operation
 //extension SPCameraEngine {
 //    // Setup Zoom
@@ -462,39 +457,6 @@ extension SPCameraEngine {
 //    }
 //
 //}
-
-//MARK: Switch camera Focus mode
-extension SPCameraEngine {
-    
-//    public func switchCameraFocusMode(isAuto auto: Bool) {
-//
-////        guard let device = currentCamera else {
-////            return
-////        }
-//
-//        if auto {
-//            autoFocus()
-//        } else {
-////            sessionQueue.async {
-////                do {
-////                    try device.lockForConfiguration()
-////                    if device.isFocusModeSupported(.locked) {
-////                        device.focusMode = .locked
-////                    }
-////                    device.unlockForConfiguration()
-////                } catch {
-////                    return
-////                }
-////            }
-//
-//            configCaptureSessionWith(handler: { device in
-//                if device.isFocusModeSupported(.locked) {
-//                    device.focusMode = .locked
-//                }
-//            })
-//        }
-//    }
-}
 
 extension SPCameraEngine: AVCaptureVideoDataOutputSampleBufferDelegate {
     func captureOutput(_ output: AVCaptureOutput, didOutput sampleBuffer: CMSampleBuffer, from connection: AVCaptureConnection) {

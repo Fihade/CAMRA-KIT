@@ -123,12 +123,10 @@ extension MenuSheetView {
     }
     
     @objc private func selectTimer() {
-//        optionWillSelectedAnimate()
         timerOptionBar.appear()
     }
     
     @objc private func selectAWB() {
-//        optionWillSelectedAnimate()
         whiteBalanceOptionBar.appear()
     }
 }

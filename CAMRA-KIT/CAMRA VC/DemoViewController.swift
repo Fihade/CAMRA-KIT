@@ -217,8 +217,11 @@ extension DemoViewController: BottomSheetViewDelegate {
     }
     
     func switchLen(with button: LenButton) {
-        button.lens = Lens(lens: cameraEngine.availableCameraTypes, current: cameraEngine.cameraType)
+//        button.lens = Lens(lens: cameraEngine.availableCameraTypes, current: cameraEngine.cameraType)
+//        button.lens = Lens(lens: [.builtInWideAngleCamera, .builtInUltraWideCamera, .builtInTelephotoCamera], current: .builtInWideAngleCamera)
         button.turnNextLen()
+        
+        
     }
     
     func capturePhoto() {

@@ -86,11 +86,7 @@ class BottomSheetView: UIView {
         lenButton.translatesAutoresizingMaskIntoConstraints = false
         self.addSubview(lenButton)
         
-        rawButton = RAWButton()
-        rawButton.layer.masksToBounds = true
-        rawButton.sizeToFit()
-        rawButton.translatesAutoresizingMaskIntoConstraints = false
-        self.addSubview(rawButton)
+        
         
         NSLayoutConstraint.activate([
             //
@@ -103,22 +99,15 @@ class BottomSheetView: UIView {
             captureButton.widthAnchor.constraint(equalToConstant: 80),
             captureButton.heightAnchor.constraint(equalToConstant: 80),
             
-            
             capturedImageView.heightAnchor.constraint(equalToConstant: 64),
             capturedImageView.widthAnchor.constraint(equalToConstant: 64),
             capturedImageView.centerYAnchor.constraint(equalTo: lowHalfArea.centerYAnchor),
             capturedImageView.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: 10),
             
-        
-            rawButton.trailingAnchor.constraint(equalTo: lowHalfArea.trailingAnchor, constant: -10),
-            rawButton.centerYAnchor.constraint(equalTo: lowHalfArea.centerYAnchor),
-            rawButton.heightAnchor.constraint(equalToConstant: 15),
-            rawButton.widthAnchor.constraint(equalToConstant: 31),
-            
             lenButton.centerYAnchor.constraint(equalTo: lowHalfArea.centerYAnchor),
             lenButton.heightAnchor.constraint(equalToConstant: 30),
             lenButton.widthAnchor.constraint(equalToConstant: 30),
-            lenButton.trailingAnchor.constraint(equalTo: rawButton.leadingAnchor, constant: -20),
+            lenButton.leadingAnchor.constraint(equalTo: captureButton.trailingAnchor, constant: 30),
             
         ])
         
@@ -156,6 +145,12 @@ class BottomSheetView: UIView {
         
         self.addSubview(lenPositionLable)
         
+        rawButton = RAWButton()
+        rawButton.layer.masksToBounds = true
+        rawButton.sizeToFit()
+        rawButton.translatesAutoresizingMaskIntoConstraints = false
+        self.addSubview(rawButton)
+        
         NSLayoutConstraint.activate([
             topHalfArea.heightAnchor.constraint(equalToConstant: 40),
             topHalfArea.widthAnchor.constraint(equalTo: self.widthAnchor),
@@ -174,7 +169,12 @@ class BottomSheetView: UIView {
             lenPositionSlider.centerYAnchor.constraint(equalTo: topHalfArea.centerYAnchor),
             
             lenPositionLable.centerYAnchor.constraint(equalTo: lenPositionSlider.centerYAnchor),
-            lenPositionLable.trailingAnchor.constraint(equalTo: lenPositionSlider.leadingAnchor, constant: -10)
+            lenPositionLable.trailingAnchor.constraint(equalTo: lenPositionSlider.leadingAnchor, constant: -10),
+            
+            rawButton.trailingAnchor.constraint(equalTo: topHalfArea.trailingAnchor, constant: -10),
+            rawButton.centerYAnchor.constraint(equalTo: topHalfArea.centerYAnchor),
+            rawButton.heightAnchor.constraint(equalToConstant: 16),
+            rawButton.widthAnchor.constraint(equalToConstant: 32),
         ])
         
         focusModeButton.addTarget(self, action: #selector(selectFocusMode), for: .touchUpInside)

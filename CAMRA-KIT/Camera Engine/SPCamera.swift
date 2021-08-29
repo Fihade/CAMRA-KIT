@@ -132,6 +132,7 @@ extension SPCamera: SPCameraSystemAbility {
     var cameraType: AVCaptureDevice.DeviceType { return _type }
     var availableCameraTypes: [AVCaptureDevice.DeviceType] {
         if _position == .back {
+            
             return backAvailableCaptureDevices.devices.map{ $0.deviceType }
         } else {
             return frontAvailableCaptureDevices.devices.map{ $0.deviceType}

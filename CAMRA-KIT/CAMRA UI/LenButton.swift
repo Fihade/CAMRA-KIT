@@ -9,33 +9,46 @@ import UIKit
 import AVFoundation
 
 struct Lens {
-    var lens: [AVCaptureDevice.DeviceType]
-    var currLen: AVCaptureDevice.DeviceType { return lens[currIdx] }
-    private var currIdx: Int
     
-    init(lens: [AVCaptureDevice.DeviceType], current: AVCaptureDevice.DeviceType) {
-        self.lens = lens
-        self.currIdx = lens.firstIndex(of: current)!
+    private lazy var backAvailableCaptureDevices = AVCaptureDevice.DiscoverySession(
+        deviceTypes: [.builtInWideAngleCamera, .builtInTelephotoCamera, .builtInUltraWideCamera],
+        mediaType: .video,
+        position: .back
+    )
+
+    private lazy var frontAvailableCaptureDevices = AVCaptureDevice.DiscoverySession(
+        deviceTypes: [.builtInWideAngleCamera, .builtInTelephotoCamera, .builtInUltraWideCamera],
+        mediaType: .video,
+        position: .front
+    )
+    
+//    var lens: [AVCaptureDevice.DeviceType]
+    var lens: [AVCaptureDevice.DeviceType] = [.builtInWideAngleCamera, .builtInUltraWideCamera, .builtInTelephotoCamera]
+    
+    var current: AVCaptureDevice.DeviceType { return lens[_idx] }
+    private var _idx: Int = 0
+    
+    init(len: AVCaptureDevice.DeviceType) {
+        _idx = lens.firstIndex(of: current) ?? 0
+//        lens = backAvailableCaptureDevices.devices.map{$0.deviceType}
+    }
+    
+    init() {
+        
     }
     
     mutating func switchToNext() -> AVCaptureDevice.DeviceType {
-        if currIdx == lens.count - 1 {
-            currIdx = 0
-        } else {
-            currIdx += 1
-        }
-        
-        return currLen
+        _idx = (_idx + 1) % lens.count
+        return current
     }
 }
 
 
 class LenButton: UIButton {
     
-    var extraLens = [".5", "1", "2"]
-    public var lens: Lens! {
+    public var lens: Lens = Lens() {
         didSet {
-            currentLen = lens.currLen
+            len = lens.current
         }
     }
     
@@ -45,9 +58,9 @@ class LenButton: UIButton {
         }
     }
     
-    private var currentLen: AVCaptureDevice.DeviceType = .builtInWideAngleCamera {
+    private var len: AVCaptureDevice.DeviceType = .builtInWideAngleCamera {
         didSet {
-            switch currentLen {
+            switch len {
                 case .builtInWideAngleCamera:
                     name = "1"
                 case .builtInTelephotoCamera:
@@ -60,10 +73,9 @@ class LenButton: UIButton {
         }
     }
     
-    convenience init(lens: [AVCaptureDevice.DeviceType], currentLen: AVCaptureDevice.DeviceType) {
+    convenience init(len: AVCaptureDevice.DeviceType) {
         self.init()
-        self.lens = Lens(lens: lens, current: currentLen)
-//        setupUI()
+        self.lens = Lens(len: len)
     }
     
     override init(frame: CGRect) {
