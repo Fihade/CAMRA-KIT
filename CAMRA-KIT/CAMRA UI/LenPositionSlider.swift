@@ -43,8 +43,6 @@ class LenPositionSlider: UIView {
         self.addSubview(lenPositionLable)
         
         NSLayoutConstraint.activate([
-
-            
             lenPositionSlider.widthAnchor.constraint(equalToConstant: 250),
             lenPositionSlider.centerYAnchor.constraint(equalTo: self.centerYAnchor),
             lenPositionSlider.centerXAnchor.constraint(equalTo: self.centerXAnchor),

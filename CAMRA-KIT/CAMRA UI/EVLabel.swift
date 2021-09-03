@@ -19,6 +19,14 @@ class EVLabel: UILabel {
             
         }
     }
+    
+//    private var lens: Lens!
+//    
+//    convenience init(lens: Lens) {
+//        self.init()
+//        self.lens = lens
+//    }
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
         setupUI()
@@ -30,27 +38,13 @@ class EVLabel: UILabel {
     }
     
     private func setupUI() {
-        self.text = " + \(bias) "
+        bias = 0.0
         self.textColor = UIColor.yellow
         self.font = UIFont.systemFont(ofSize: 15, weight: .bold)
         self.layer.borderColor = UIColor.black.cgColor
         self.layer.masksToBounds = true
-    }
-    
-    override func didMoveToWindow() {
-        self.layer.mask = maskLayer
-    }
-
-    let shapeLayer = CAShapeLayer()
-    let maskLayer = CAShapeLayer()
-
-    override func layoutSubviews() {
-
-        shapeLayer.path = UIBezierPath(roundedRect: self.bounds, cornerRadius: 5).cgPath
-        shapeLayer.strokeColor = UIColor.yellow.cgColor
-        shapeLayer.lineWidth = 1
-        shapeLayer.fillColor = UIColor.black.withAlphaComponent(0.4).cgColor
-        maskLayer.path = shapeLayer.path
+        self.layer.cornerRadius = 5
+        self.backgroundColor = .black.withAlphaComponent(0.6)
     }
     
     func setBias(_ val: Float) {

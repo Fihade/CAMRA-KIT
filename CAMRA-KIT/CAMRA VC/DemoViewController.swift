@@ -11,7 +11,7 @@ import Accelerate
 
 class DemoViewController: UIViewController {
 
-    private var mainView: PreviewView!
+    private var mainView: SPPreviewView!
     private var bottomSheet: BottomSheetView!
     private var imageView: UIImageView!
     private var menuSheet: MenuSheetView!
@@ -35,13 +35,9 @@ class DemoViewController: UIViewController {
         bottomSheet.delegate = self
 
         // Notification
-        NotificationCenter.default.addObserver(
-            forName: UIDevice.orientationDidChangeNotification,
-            object: nil, queue: .main,
-            using: {_ in
-                self.menuSheet.adjustOrientationFromDevice(UIDevice.current.orientation)
-                self.bottomSheet.adjustOrientationFromDevice(UIDevice.current.orientation)
-            })
+        NotificationCenter.default.addObserver(self, selector: #selector(adjustOrientation), name: UIDevice.orientationDidChangeNotification, object: nil)
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(selectedAWB(_:)), name: .AWBDidSelected, object: nil)
         
         NotificationCenter.default.addObserver(
             forName: .AWBDidSelected,
@@ -51,6 +47,17 @@ class DemoViewController: UIViewController {
                 self.cameraEngine.setCameraAWB(at: Float(wb.value))
             }
         )
+    }
+    
+    @objc private func adjustOrientation() {
+        self.menuSheet.adjustOrientationFromDevice(UIDevice.current.orientation)
+        self.bottomSheet.adjustOrientationFromDevice(UIDevice.current.orientation)
+    }
+    
+    //TODO: Need to be tested
+    @objc private func selectedAWB(_ value: Notification) {
+        guard let wb = value.object as? WhiteBalance else { return }
+        self.cameraEngine.setCameraAWB(at: Float(wb.value))
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -68,7 +75,7 @@ class DemoViewController: UIViewController {
         self.view.backgroundColor = .black
   
         //setup main view
-        mainView = PreviewView()
+        mainView = SPPreviewView()
         
         mainView.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(mainView)
@@ -211,9 +218,17 @@ extension DemoViewController: BottomSheetViewDelegate {
             with: button, duration: 0.3,
             options: [.transitionFlipFromLeft, .curveEaseInOut],
             animations: {
-                button.getNextLen()
+//                button.getNextLen()
             }
         )
+    }
+    
+    func switchLen(with button: LenButton) {
+//        button.lens = Lens(lens: cameraEngine.availableCameraTypes, current: cameraEngine.cameraType)
+//        button.lens = Lens(lens: [.builtInWideAngleCamera, .builtInUltraWideCamera, .builtInTelephotoCamera], current: .builtInWideAngleCamera)
+        button.turnNextLen()
+        
+        
     }
     
     func capturePhoto() {

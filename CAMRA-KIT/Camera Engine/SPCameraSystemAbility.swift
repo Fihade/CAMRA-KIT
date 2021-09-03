@@ -8,9 +8,15 @@
 import Foundation
 import AVFoundation
 
+enum CaptureFormat {
+    case DNG
+    case RAW
+    case RAWPlus
+    case Normal
+}
+
+
 @objc protocol SPCameraSystemAbility {
-    
-    
     
     @objc optional func toggleCamera()
     @objc optional func focusAutomaticlly()
@@ -20,7 +26,7 @@ import AVFoundation
     @objc optional func setCameraBias(_ bias: Float)
     @objc optional func setZoomFactor(_ value: CGFloat)
     @objc optional func setFlashMode(_ mode: AVCaptureDevice.FlashMode)
-    @objc optional func switchFocusMode(_ mode: AVCaptureDevice.FocusMode) 
+    @objc optional func switchFocusMode(_ mode: AVCaptureDevice.FocusMode)
     
     @objc optional var bias: Float {get}
     @objc optional var maxBias: Float {get}
@@ -29,10 +35,12 @@ import AVFoundation
     @objc optional var minZoom: Float {get}
     @objc optional var zoomFactor: Float {get}
     @objc optional var isRAWSupported: Bool {get}
+//    @objc optional var captureFormat: CaptureFormat {get}
     @objc optional var flashMode: AVCaptureDevice.FlashMode {get}
     @objc optional var focusMode: AVCaptureDevice.FocusMode {get}
     @objc optional var exposureMode: AVCaptureDevice.ExposureMode {get}
     @objc optional var cameraPosition: AVCaptureDevice.Position {get}
     @objc optional var cameraType: AVCaptureDevice.DeviceType { get }
+    @objc optional var availableCameraTypes: [AVCaptureDevice.DeviceType] { get }
     
 }
