@@ -86,14 +86,11 @@ class BottomSheetView: UIView {
         lenButton.translatesAutoresizingMaskIntoConstraints = false
         self.addSubview(lenButton)
         
-        
-        
         NSLayoutConstraint.activate([
-            //
             lowHalfArea.heightAnchor.constraint(equalToConstant: 80),
             lowHalfArea.widthAnchor.constraint(equalTo: self.widthAnchor),
             lowHalfArea.bottomAnchor.constraint(equalTo: self.bottomAnchor, constant: -20),
-            //
+            
             captureButton.centerYAnchor.constraint(equalTo: lowHalfArea.centerYAnchor),
             captureButton.centerXAnchor.constraint(equalTo: self.centerXAnchor),
             captureButton.widthAnchor.constraint(equalToConstant: 80),
@@ -108,7 +105,6 @@ class BottomSheetView: UIView {
             lenButton.heightAnchor.constraint(equalToConstant: 30),
             lenButton.widthAnchor.constraint(equalToConstant: 30),
             lenButton.leadingAnchor.constraint(equalTo: captureButton.trailingAnchor, constant: 30),
-            
         ])
         
         let topHalfArea = UILayoutGuide()
@@ -164,7 +160,7 @@ class BottomSheetView: UIView {
             focusModeButton.heightAnchor.constraint(equalToConstant: 27),
             focusModeButton.widthAnchor.constraint(equalToConstant: 27),
             
-            lenPositionSlider.widthAnchor.constraint(equalToConstant: 250),
+            lenPositionSlider.widthAnchor.constraint(equalToConstant: 200),
             lenPositionSlider.trailingAnchor.constraint(equalTo: topHalfArea.leadingAnchor, constant: -10),
             lenPositionSlider.centerYAnchor.constraint(equalTo: topHalfArea.centerYAnchor),
             
@@ -186,7 +182,7 @@ class BottomSheetView: UIView {
         delegate?.setLenPosition(with: sender.value)
     }
     
-    var expand = false
+    private var expand = false
     
     @objc func selectFocusMode() {
         
@@ -194,7 +190,7 @@ class BottomSheetView: UIView {
         delegate?.switchCameraFocusMode(is: expand)
         
         UIView.animate(withDuration: 0.3, delay: 0, options: .curveEaseOut, animations: {
-            let distance = (self.bounds.width + self.lenPositionSlider.bounds.width) / 2
+            let distance = self.lenPositionSlider.bounds.width + 42
             self.lenPositionSlider.transform = CGAffineTransform(translationX: self.expand ? distance : 0, y: 0)
             self.focusModeButton.transform = CGAffineTransform(translationX: self.expand ? distance : 0, y: 0)
             self.lenPositionLable.transform = CGAffineTransform(translationX: self.expand ? distance : 0, y: 0)
@@ -215,7 +211,7 @@ extension BottomSheetView {
         rawButton.addTarget(self, action: #selector(tapRAW), for: .touchDown)
         lenButton.addTarget(self, action: #selector(tapLen(_:)), for: .touchDown)
         captureButton.addTarget(self, action: #selector(capture(_:)), for: .touchDown)
-        capturedImageView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(tap(_:))))
+//        capturedImageView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(tap(_:))))
     }
     
     @objc private func tapRAW(_ sender: RAWButton) {
@@ -223,7 +219,9 @@ extension BottomSheetView {
     }
     
     @objc private func tapLen(_ sender: LenButton) {
+        #if DEBUG
         print("tap len")
+        #endif
         delegate?.switchLen?(with: sender)
     }
     
@@ -231,12 +229,8 @@ extension BottomSheetView {
         delegate?.capturePhoto()
     }
     
-    @objc private func tap(_ sender: UITapGestureRecognizer) {
-//        if let imageView = sender.view as? UIImageView,
-//           let image = imageView.image {
-//
-//        }
-    }
+//    @objc private func tap(_ sender: UITapGestureRecognizer) {
+//    }
 }
 
 extension BottomSheetView {

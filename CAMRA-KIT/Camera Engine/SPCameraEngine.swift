@@ -130,15 +130,27 @@ class SPCameraEngine: NSObject {
     }
     
     private func observe() {
-        NotificationCenter.default.addObserver(
-            forName: .AVCaptureDeviceSubjectAreaDidChange,
-            object: .none, queue: .none,
-            using: {_ in
-                print("AVCaptureDeviceSubjectAreaDidChange")
-                self.focusView?.removeFromSuperview()
-                self.focusAutomaticlly()
-            }
-        )
+//        NotificationCenter.default.addObserver(
+//            forName: .AVCaptureDeviceSubjectAreaDidChange,
+//            object: .none, queue: .none,
+//            using: {_ in
+//                print("AVCaptureDeviceSubjectAreaDidChange")
+//                self.focusView?.removeFromSuperview()
+//                self.focusAutomaticlly()
+//            }
+//        )
+        //TODO: NotificationCenter use
+        NotificationCenter.default.addObserver(self, selector: #selector(subjectAreaDidChange), name: .AVCaptureDeviceSubjectAreaDidChange, object: nil)
+        
+        
+    }
+    //TODO: Need to be tested the observer operation
+    @objc private func subjectAreaDidChange() {
+        #if DEBUG
+        print("AVCaptureDeviceSubjectAreaDidChange")
+        #endif
+        self.focusView?.removeFromSuperview()
+        self.focusAutomaticlly()
     }
     
     // NOTE: values: preview's pan gesture

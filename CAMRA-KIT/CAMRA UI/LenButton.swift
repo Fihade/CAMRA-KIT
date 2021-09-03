@@ -22,7 +22,7 @@ struct Lens {
         position: .front
     )
     
-//    var lens: [AVCaptureDevice.DeviceType]
+//    lazy var lens: [AVCaptureDevice.DeviceType] = backAvailableCaptureDevices.devices.map {$0.deviceType}
     var lens: [AVCaptureDevice.DeviceType] = [.builtInWideAngleCamera, .builtInUltraWideCamera, .builtInTelephotoCamera]
     
     var current: AVCaptureDevice.DeviceType { return lens[_idx] }
